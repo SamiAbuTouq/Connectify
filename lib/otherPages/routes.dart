@@ -4,13 +4,13 @@ import '/views/home.dart';
 import '/views/login.dart';
 import '/views/start.dart';
 import '/views/signup.dart';
-import 'views/service1.dart';
-import 'views/service2.dart';
+import '../views/service1.dart';
+import '../views/service2.dart';
 import '/views/upload_area.dart';
 import '/services/auth_service.dart';
-import 'views/select_service_1.dart';
+import '../views/select_service_1.dart';
 import 'package:flutter/material.dart';
-import 'views/im_looking_for_screen.dart';
+import '../views/im_looking_for_screen.dart';
 import '/onboarding/onboarding_screens.dart';
 
 final Map<String, WidgetBuilder> appRoutes = {

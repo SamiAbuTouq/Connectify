@@ -2,9 +2,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'widgets/user_image_picker.dart';
+import '../widgets/user_image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'services/cloudinary_service.dart';
+import '../services/cloudinary_service.dart';
 import 'package:file_picker/file_picker.dart';
 
 final _firebase = FirebaseAuth.instance;
