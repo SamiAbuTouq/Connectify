@@ -7,6 +7,7 @@ import 'package:flutter_cloudinary_file_upload/views/signup.dart';
 import 'package:flutter_cloudinary_file_upload/views/upload_area.dart';
 import 'package:flutter_cloudinary_file_upload/services/auth_service.dart';
 import 'package:flutter_cloudinary_file_upload/onboarding/onboarding_screens.dart';
+import '/views/start.dart';
 
 final Map<String, WidgetBuilder> appRoutes = {
   "/": (context) => const CheckUser(),
@@ -17,6 +18,7 @@ final Map<String, WidgetBuilder> appRoutes = {
   "/splashScreen": (context) => const SplashScreen(),
   "/mainPage": (context) => const MainPage(),
   "/onboardingScreens": (context) => const OnboardingScreens(),
+  "/startPage": (context) => const StartPage(),
 };
 
 class CheckUser extends StatefulWidget {
