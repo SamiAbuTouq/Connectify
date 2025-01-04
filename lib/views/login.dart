@@ -129,63 +129,67 @@ class _LoginPageState extends State<LoginPage> {
                         height: 10,
                       ),
                       SizedBox(
-                          width: MediaQuery.of(context).size.width * .9,
-                          child: TextFormField(
-                            validator: (value) => value!.length < 8
-                                ? "Password should have atleast 8 characters."
-                                : null,
-                            controller: _passwordController,
-                            obscureText: true,
-                            decoration: const InputDecoration(
-                              prefixIcon: Icon(Icons.password_outlined),
-                              border: OutlineInputBorder(),
-                              label: Text("Password"),
-                            ),
-                          )),
+                        width: MediaQuery.of(context).size.width * .9,
+                        child: TextFormField(
+                          validator: (value) => value!.length < 8
+                              ? "Password should have atleast 8 characters."
+                              : null,
+                          controller: _passwordController,
+                          obscureText: true,
+                          decoration: const InputDecoration(
+                            prefixIcon: Icon(Icons.password_outlined),
+                            border: OutlineInputBorder(),
+                            label: Text("Password"),
+                          ),
+                        ),
+                      ),
                       const SizedBox(
                         height: 18,
                       ),
                       Row(
                         children: [
-                          SizedBox(
-                            height: 50,
-                            width: MediaQuery.of(context).size.width * .9,
-                            //MediaQuery.of(context).size --> gives the dimensions of the screen
-                            child: ElevatedButton.icon(
-                              icon: const Icon(Icons.arrow_forward),
-                              iconAlignment: IconAlignment.end,
-                              style: buttonStyle,
-                              onPressed: () {
-                                if (formKey.currentState!.validate()) {
-                                  AuthService()
-                                      .loginWithEmail(_emailController.text,
-                                          _passwordController.text)
-                                      .then(
-                                    (value) {
-                                      if (value == "Login Successful") {
-                                        Navigator
-                                            .restorablePushNamedAndRemoveUntil(
-                                                context,
-                                                "/mainPage",
-                                                (route) => false);
-                                      } else {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                          content: Text(
-                                            value,
-                                            style: const TextStyle(
-                                                color: Colors.white),
-                                          ),
-                                          backgroundColor: Colors.red.shade400,
-                                        ));
-                                      }
-                                    },
-                                  );
-                                }
-                              },
-                              label: const Text(
-                                "Login",
-                                style: TextStyle(fontSize: 16),
+                          Center(
+                            child: SizedBox(
+                              height: 55,
+                              width: MediaQuery.of(context).size.width * .88,
+                              //MediaQuery.of(context).size --> gives the dimensions of the screen
+                              child: ElevatedButton.icon(
+                                icon: const Icon(Icons.arrow_forward),
+                                iconAlignment: IconAlignment.end,
+                                style: buttonStyle,
+                                onPressed: () {
+                                  if (formKey.currentState!.validate()) {
+                                    AuthService()
+                                        .loginWithEmail(_emailController.text,
+                                            _passwordController.text)
+                                        .then(
+                                      (value) {
+                                        if (value == "Login Successful") {
+                                          Navigator
+                                              .restorablePushNamedAndRemoveUntil(
+                                                  context,
+                                                  "/mainPage",
+                                                  (route) => false);
+                                        } else {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                            content: Text(
+                                              value,
+                                              style: const TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                            backgroundColor:
+                                                Colors.red.shade400,
+                                          ));
+                                        }
+                                      },
+                                    );
+                                  }
+                                },
+                                label: const Text(
+                                  "Login",
+                                  style: TextStyle(fontSize: 16),
+                                ),
                               ),
                             ),
                           ),
@@ -194,29 +198,31 @@ class _LoginPageState extends State<LoginPage> {
                       const SizedBox(
                         height: 18,
                       ),
-                      SizedBox(
-                        height: 50,
-                        width: MediaQuery.of(context).size.width * .9,
-                        child: ElevatedButton(
-                          iconAlignment: IconAlignment.end,
-                          style: buttonStyle,
-                          onPressed: signInWithGoogle,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                "assets/images/logo/google.png",
-                                width: 27,
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              const Text(
-                                "Sign in with Google",
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            ],
+                      Center(
+                        child: SizedBox(
+                          height: 55,
+                          width: MediaQuery.of(context).size.width * .88,
+                          child: ElevatedButton(
+                            iconAlignment: IconAlignment.end,
+                            style: buttonStyle,
+                            onPressed: signInWithGoogle,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  "assets/images/logo/google.png",
+                                  width: 27,
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                const Text(
+                                  "Sign in with Google",
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),

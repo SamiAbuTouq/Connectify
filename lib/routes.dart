@@ -1,13 +1,17 @@
-import 'main_Page.dart';
 import 'splash.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_cloudinary_file_upload/views/home.dart';
-import 'package:flutter_cloudinary_file_upload/views/login.dart';
-import 'package:flutter_cloudinary_file_upload/views/signup.dart';
-import 'package:flutter_cloudinary_file_upload/views/upload_area.dart';
-import 'package:flutter_cloudinary_file_upload/services/auth_service.dart';
-import 'package:flutter_cloudinary_file_upload/onboarding/onboarding_screens.dart';
+import 'main_Page.dart';
+import '/views/home.dart';
+import '/views/login.dart';
 import '/views/start.dart';
+import '/views/signup.dart';
+import 'views/service1.dart';
+import 'views/service2.dart';
+import '/views/upload_area.dart';
+import '/services/auth_service.dart';
+import 'views/select_service_1.dart';
+import 'package:flutter/material.dart';
+import 'views/im_looking_for_screen.dart';
+import '/onboarding/onboarding_screens.dart';
 
 final Map<String, WidgetBuilder> appRoutes = {
   "/": (context) => const CheckUser(),
@@ -19,6 +23,10 @@ final Map<String, WidgetBuilder> appRoutes = {
   "/mainPage": (context) => const MainPage(),
   "/onboardingScreens": (context) => const OnboardingScreens(),
   "/startPage": (context) => const StartPage(),
+  "/selectService": (context) => const SelectService(),
+  "/imLookingFor": (context) => const ImLookingForScreen(),
+  "/service1": (context) => const Service1(),
+  "/service2": (context) => const Service2(),
 };
 
 class CheckUser extends StatefulWidget {

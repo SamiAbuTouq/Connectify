@@ -39,6 +39,14 @@ class _UploadAreaState extends State<UploadArea> {
                       color: Color.fromARGB(255, 0, 0, 0), width: 2.0),
                 ),
               ),
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'Username is required.';
+                } else if (value.trim().length <= 2) {
+                  return 'Username must be more than 2 characters.';
+                }
+                return null;
+              },
             ),
             const SizedBox(
               height: 20,
@@ -72,7 +80,7 @@ class _UploadAreaState extends State<UploadArea> {
 
                       if (result) {
                         // Navigator.pop(context);
-                        Navigator.pushReplacementNamed(context, "/mainPage");
+                        Navigator.pushNamed(context, "/imLookingFor");
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(

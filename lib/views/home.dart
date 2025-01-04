@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
                 XFile? image =
                     await _picker.pickImage(source: ImageSource.camera);
                 if (image != null) {
-                  Navigator.pushReplacementNamed(context, "/upload",
+                  Navigator.pushNamed(context, "/upload",
                       arguments: image); // Pass XFile
                 }
               },
@@ -70,9 +70,14 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: const Center(
-        child: Text(
-          'Tap the button below to select a file',
-          style: TextStyle(fontSize: 18),
+        child: Padding(
+          padding: EdgeInsets.all(40),
+          child: Center(
+            child: Text(
+              'Tap the button below to upload your profile picture',
+              style: TextStyle(fontSize: 18),
+            ),
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(

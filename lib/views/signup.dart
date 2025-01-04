@@ -13,9 +13,16 @@ class SignupPage extends StatefulWidget {
 }
 
 var buttonStyle = ElevatedButton.styleFrom(
-  iconColor: Colors.amber,
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(10),
+  ),
+  iconColor: Colors.white,
   iconSize: 24,
-  side: const BorderSide(color: Colors.amber, width: 2), // Border added here
+  foregroundColor: Colors.white,
+  backgroundColor: Colors.black,
+  side: const BorderSide(color: Color.fromARGB(255, 255, 255, 255), width: 2),
+  elevation: 20,
+  shadowColor: const Color.fromARGB(255, 0, 0, 0).withValues(alpha: 40),
 );
 
 class _SignupPageState extends State<SignupPage> {
@@ -48,19 +55,16 @@ class _SignupPageState extends State<SignupPage> {
       if (googleAuth.accessToken == null || googleAuth.idToken == null) {
         return Future.error('Google authentication failed.');
       }
-      print("1");
 
       // Create a new credential
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
-      print("2");
 
       // Sign in with Firebase
       final userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
-      print("3");
       // Save user info to Firestore
       final user = userCredential.user;
       if (user != null) {
@@ -148,73 +152,80 @@ class _SignupPageState extends State<SignupPage> {
                       const SizedBox(
                         height: 18,
                       ),
-                      SizedBox(
-                        height: 50,
-                        width: MediaQuery.of(context).size.width * .9,
-                        child: ElevatedButton.icon(
-                          icon: const Icon(Icons.arrow_forward),
-                          iconAlignment: IconAlignment.end,
-                          style: buttonStyle,
-                          onPressed: () {
-                            if (formKey.currentState!.validate()) {
-                              AuthService()
-                                  .createAccountWithEmail(_emailController.text,
-                                      _passwordController.text)
-                                  .then(
-                                (value) {
-                                  if (value == "Account Created") {
-                                    Navigator.restorablePushNamedAndRemoveUntil(
-                                        context,
-                                        "/home",
-                                        (route) => false); //!home
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          value,
-                                          style: const TextStyle(
-                                              color: Colors.white),
+                      Center(
+                        child: SizedBox(
+                          height: 55,
+                          width: MediaQuery.of(context).size.width * .88,
+                          child: ElevatedButton.icon(
+                            icon: const Icon(Icons.arrow_forward),
+                            iconAlignment: IconAlignment.end,
+                            style: buttonStyle,
+                            onPressed: () {
+                              if (formKey.currentState!.validate()) {
+                                AuthService()
+                                    .createAccountWithEmail(
+                                        _emailController.text,
+                                        _passwordController.text)
+                                    .then(
+                                  (value) {
+                                    if (value == "Account Created") {
+                                      Navigator
+                                          .restorablePushNamedAndRemoveUntil(
+                                              context,
+                                              "/home",
+                                              (route) => false); //!home
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            value,
+                                            style: const TextStyle(
+                                                color: Colors.white),
+                                          ),
+                                          backgroundColor: Colors.red.shade400,
                                         ),
-                                        backgroundColor: Colors.red.shade400,
-                                      ),
-                                    );
-                                  }
-                                },
-                              );
-                            }
-                          },
-                          label: const Text(
-                            "Sign Up",
-                            style: TextStyle(fontSize: 16),
+                                      );
+                                    }
+                                  },
+                                );
+                              }
+                            },
+                            label: const Text(
+                              "Sign Up",
+                              style: TextStyle(fontSize: 16),
+                            ),
                           ),
                         ),
                       ),
                       const SizedBox(
                         height: 18,
                       ),
-                      SizedBox(
-                        height: 50,
-                        width: MediaQuery.of(context).size.width * .9,
-                        child: ElevatedButton(
-                          iconAlignment: IconAlignment.end,
-                          style: buttonStyle,
-                          onPressed: signInWithGoogle,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                "assets/images/logo/google.png",
-                                width: 27,
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              const Text(
-                                "Sign up with Google",
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            ],
+                      Center(
+                        child: SizedBox(
+                          height: 55,
+                          width: MediaQuery.of(context).size.width * .88,
+                          child: ElevatedButton(
+                            iconAlignment: IconAlignment.end,
+                            style: buttonStyle,
+                            onPressed: signInWithGoogle,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  "assets/images/logo/google.png",
+                                  width: 27,
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                const Text(
+                                  "Sign up with Google",
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
