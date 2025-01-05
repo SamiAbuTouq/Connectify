@@ -13,9 +13,16 @@ class LoginPage extends StatefulWidget {
 }
 
 var buttonStyle = ElevatedButton.styleFrom(
-  iconColor: Colors.amber,
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(10),
+  ),
+  iconColor: Colors.white,
   iconSize: 24,
-  side: const BorderSide(color: Colors.amber, width: 2), // Border added here
+  foregroundColor: Colors.white,
+  backgroundColor: Colors.black,
+  side: const BorderSide(color: Color.fromARGB(255, 255, 255, 255), width: 2),
+  elevation: 20,
+  shadowColor: const Color.fromARGB(255, 0, 0, 0).withValues(alpha: 40),
 );
 
 class _LoginPageState extends State<LoginPage> {
