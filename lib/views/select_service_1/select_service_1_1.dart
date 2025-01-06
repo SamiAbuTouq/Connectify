@@ -1,41 +1,31 @@
 import 'package:animate_do/animate_do.dart';
-import 'service.dart';
+import 'package:flutter_cloudinary_file_upload/views/service.dart';
+
 // import 'package:day35/pages/cleaning.dart';
 import 'package:flutter/material.dart';
 
-class SelectService2 extends StatefulWidget {
-  const SelectService2(
-      {super.key,
-      required title,
-      required services,
-      required nextPageRoute,
-      required numOfServices})
-      : _title = title,
-        _services = services,
-        // _nextPageRoute = nextPageRoute,
-        _numOfServices = numOfServices;
-
-  final String _title;
-  final List<Service> _services;
-  // final String _nextPageRoute;
-  final int _numOfServices;
+class SelectService11 extends StatefulWidget {
+  const SelectService11({super.key});
 
   @override
   State<StatefulWidget> createState() {
-    return _SelectService2State();
+    return _SelectServiceState();
   }
 }
 
-class _SelectService2State extends State<SelectService2> {
-  late int selectedService;
-  late List<Service> services;
+class _SelectServiceState extends State<SelectService11> {
+  List<Service> services = [
+    Service('Electrician', 'https://icons8.com/icon/PQn9wpEzc0Gj/electrician'),
+    Service('Carpenter', 'https://icons8.com/icon/tNE4bATltVsL/saw'),
+    Service('Painting', 'https://icons8.com/icon/9TqTwCc0UVkM/paint-roller'),
+    Service('Plumber',
+        'https://img.icons8.com/?size=100&id=xFN45rDF7HLr&format=png&color=000000'),
+    Service('HVAC', 'https://icons8.com/icon/13151/cooling'),
+    Service('Pest Control', 'https://icons8.com/icon/qkaeABjCUYMw/no-fly'),
+    Service('Gardening', 'https://icons8.com/icon/htOOvGIOQJR2/garden'),
+  ];
 
-  @override
-  void initState() {
-    super.initState();
-    selectedService = widget._numOfServices;
-    services = widget._services;
-  }
+  int selectedService = -1;
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +53,7 @@ class _SelectService2State extends State<SelectService2> {
                 padding:
                     const EdgeInsets.only(top: 120.0, right: 20.0, left: 20.0),
                 child: Text(
-                  widget._title,
+                  'what type of service \do you want to offer?',
                   style: TextStyle(
                     fontSize: 40,
                     color: Colors.grey.shade900,
@@ -83,7 +73,7 @@ class _SelectService2State extends State<SelectService2> {
                 child: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    childAspectRatio: 1.0,
+                    childAspectRatio: 0.85,
                     crossAxisSpacing: 20.0,
                     mainAxisSpacing: 20.0,
                   ),
@@ -119,7 +109,7 @@ class _SelectService2State extends State<SelectService2> {
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
         decoration: BoxDecoration(
           color: selectedService == index
               ? Colors.blue.shade50
@@ -133,17 +123,20 @@ class _SelectService2State extends State<SelectService2> {
           borderRadius: BorderRadius.circular(20.0),
         ),
         child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Image.network(image, height: 80),
-              const SizedBox(
-                height: 20,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image.network(image, height: 70),
+            const SizedBox(
+              height: 20,
+            ),
+            Text(
+              name,
+              style: const TextStyle(
+                fontSize: 18,
               ),
-              Text(
-                name,
-                style: const TextStyle(fontSize: 20),
-              )
-            ]),
+            )
+          ],
+        ),
       ),
     );
   }

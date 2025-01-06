@@ -1,51 +1,43 @@
 import 'package:animate_do/animate_do.dart';
-import 'service.dart';
+import 'package:flutter_cloudinary_file_upload/views/service.dart';
 // import 'package:day35/pages/cleaning.dart';
 import 'package:flutter/material.dart';
 
-class SelectService2 extends StatefulWidget {
-  const SelectService2(
-      {super.key,
-      required title,
-      required services,
-      required nextPageRoute,
-      required numOfServices})
-      : _title = title,
-        _services = services,
-        // _nextPageRoute = nextPageRoute,
-        _numOfServices = numOfServices;
-
-  final String _title;
-  final List<Service> _services;
-  // final String _nextPageRoute;
-  final int _numOfServices;
+class SelectService15 extends StatefulWidget {
+  const SelectService15({super.key});
 
   @override
   State<StatefulWidget> createState() {
-    return _SelectService2State();
+    return _SelectServiceState();
   }
 }
 
-class _SelectService2State extends State<SelectService2> {
-  late int selectedService;
-  late List<Service> services;
+class _SelectServiceState extends State<SelectService15> {
+  List<Service> services = [
+    Service('Mathematics', 'https://icons8.com/icon/QM0dP5g8D4UH/math'),
+    Service('Physics', 'https://icons8.com/icon/RPHZmB5ERyjp/physics'),
+    Service('Chemistry', 'https://icons8.com/icon/VFobzwFtpruV/molecule'),
+    Service('Biology', 'https://icons8.com/icon/lIjOYS10WPHg/biotech'),
+    Service('Languages', 'https://icons8.com/icon/10lwQw8Al1lP/language'),
+    Service('History', 'https://icons8.com/icon/PyrI7GCv8LCv/scroll'),
+    Service('Computer Science', 'Computer Science'),
+    Service(
+        'Drawing & Sketching', 'https://icons8.com/icon/aoq1o9KzihEZ/easel'),
+    Service('Music & Performance',
+        'https://icons8.com/icon/ESNAOBMGxN0m/grand-piano'),
+  ];
 
-  @override
-  void initState() {
-    super.initState();
-    selectedService = widget._numOfServices;
-    services = widget._services;
-  }
+  Set<int> selectedServices = {};
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      floatingActionButton: selectedService >= 0
+      floatingActionButton: selectedServices.isNotEmpty
           ? FloatingActionButton(
               onPressed: () {
-                Navigator.pushReplacementNamed(
-                    context, "/service${selectedService + 1}");
+                // Handle navigation for multiple services
+                print("Selected services: $selectedServices");
               },
               backgroundColor: Colors.blue,
               child: const Icon(
@@ -63,7 +55,7 @@ class _SelectService2State extends State<SelectService2> {
                 padding:
                     const EdgeInsets.only(top: 120.0, right: 20.0, left: 20.0),
                 child: Text(
-                  widget._title,
+                  'Pick the services\n you can deliver',
                   style: TextStyle(
                     fontSize: 40,
                     color: Colors.grey.shade900,
@@ -83,7 +75,7 @@ class _SelectService2State extends State<SelectService2> {
                 child: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    childAspectRatio: 1.0,
+                    childAspectRatio: 0.85,
                     crossAxisSpacing: 20.0,
                     mainAxisSpacing: 20.0,
                   ),
@@ -104,28 +96,28 @@ class _SelectService2State extends State<SelectService2> {
     );
   }
 
-  serviceContainer(String image, String name, int index) {
+  Widget serviceContainer(String image, String name, int index) {
     return GestureDetector(
       onTap: () {
         setState(
           () {
-            if (selectedService == index) {
-              selectedService = -1;
+            if (selectedServices.contains(index)) {
+              selectedServices.remove(index);
             } else {
-              selectedService = index;
+              selectedServices.add(index);
             }
           },
         );
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
         decoration: BoxDecoration(
-          color: selectedService == index
+          color: selectedServices.contains(index)
               ? Colors.blue.shade50
               : Colors.grey.shade100,
           border: Border.all(
-            color: selectedService == index
+            color: selectedServices.contains(index)
                 ? Colors.blue
                 : const Color.fromARGB(0, 33, 149, 243),
             width: 2.0,
@@ -133,17 +125,20 @@ class _SelectService2State extends State<SelectService2> {
           borderRadius: BorderRadius.circular(20.0),
         ),
         child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Image.network(image, height: 80),
-              const SizedBox(
-                height: 20,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image.network(image, height: 70),
+            const SizedBox(
+              height: 20,
+            ),
+            Text(
+              name,
+              style: const TextStyle(
+                fontSize: 18,
               ),
-              Text(
-                name,
-                style: const TextStyle(fontSize: 20),
-              )
-            ]),
+            )
+          ],
+        ),
       ),
     );
   }
