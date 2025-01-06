@@ -12,7 +12,7 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-var buttonStyle = ElevatedButton.styleFrom(
+var _buttonStyle = ElevatedButton.styleFrom(
   shape: RoundedRectangleBorder(
     borderRadius: BorderRadius.circular(10),
   ),
@@ -163,7 +163,7 @@ class _LoginPageState extends State<LoginPage> {
                               child: ElevatedButton.icon(
                                 icon: const Icon(Icons.arrow_forward),
                                 iconAlignment: IconAlignment.end,
-                                style: buttonStyle,
+                                style: _buttonStyle,
                                 onPressed: () {
                                   if (formKey.currentState!.validate()) {
                                     AuthService()
@@ -211,7 +211,7 @@ class _LoginPageState extends State<LoginPage> {
                           width: MediaQuery.of(context).size.width * .88,
                           child: ElevatedButton(
                             iconAlignment: IconAlignment.end,
-                            style: buttonStyle,
+                            style: _buttonStyle,
                             onPressed: signInWithGoogle,
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,

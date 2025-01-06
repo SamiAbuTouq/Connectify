@@ -68,6 +68,67 @@ Future<bool> uploadToCloudinary(XFile? selectedFile) async {
   }
 }
 
+Future<bool> uploadToCloudinary1(File? selectedFile) async {
+  if (selectedFile == null) {
+    print("No file selected!");
+    return false;
+  }
+
+  // Read the file's bytes
+  var fileBytes = await selectedFile.readAsBytes();
+
+  String cloudName = dotenv.env['CLOUDINARY_CLOUD_NAME'] ?? '';
+
+  // Create a MultipartRequest to upload the file
+  var uri = Uri.parse("https://api.cloudinary.com/v1_1/$cloudName/raw/upload");
+  var request = http.MultipartRequest("POST", uri);
+
+  // Create a MultipartFile from the bytes
+  var multipartFile = http.MultipartFile.fromBytes(
+    'file', // The form field name for the file
+    fileBytes,
+    filename: selectedFile.path
+        .split('/')
+        .last, // Extract the file name from the path
+  );
+
+  // Add the file part to the request
+  request.files.add(multipartFile);
+
+  request.fields['upload_preset'] = "samiabutouq";
+  request.fields['resource_type'] = "raw";
+
+  // Send the request and await the response
+  var response = await request.send();
+  // Get the response as text
+  var responseBody = await response.stream
+      .transform(utf8.decoder) // Decode the bytes to string using utf8
+      .join();
+
+  final user = FirebaseAuth.instance.currentUser!;
+
+  // Print the response
+  if (response.statusCode == 200) {
+    var jsonResponse = jsonDecode(responseBody);
+    Map<String, String> requiredData = {
+      'userId': user.uid,
+      'username': 'to be implemented...', //todo: implement username
+      "imageName": selectedFile.path.split('/').last,
+      "id": jsonResponse["public_id"],
+      "size": jsonResponse["bytes"].toString(),
+      "userImgUrl": jsonResponse["secure_url"],
+      "created_at": jsonResponse["created_at"],
+    };
+
+    await DbService().saveUploadedFilesData(requiredData);
+    print("Upload successful!");
+    return true;
+  } else {
+    print("Upload failed with status: ${response.statusCode}");
+    return false;
+  }
+}
+
 // delete specific file from cloudinary
 Future<bool> deleteFromCloudinary(String publicId) async {
   // Cloudinary details

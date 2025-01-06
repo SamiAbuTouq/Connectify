@@ -1,6 +1,6 @@
 import 'splash.dart';
 import 'main_Page.dart';
-import '/views/home.dart';
+import '../views/upload.dart';
 import '/views/login.dart';
 import '/views/start.dart';
 import '/views/signup.dart';

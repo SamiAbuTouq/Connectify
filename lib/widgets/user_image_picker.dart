@@ -75,19 +75,20 @@ class _UserImagePickerState extends State<UserImagePicker> {
     return Column(
       children: [
         CircleAvatar(
-          radius: 40,
+          radius: 50,
           backgroundColor: Colors.grey,
           foregroundImage:
               _pickedImageFile != null ? FileImage(_pickedImageFile!) : null,
         ),
         TextButton.icon(
           onPressed: _showImageSourceBottomSheet,
-          icon: const Icon(Icons.image),
-          label: Text(
+          icon: const Icon(
+            Icons.image,
+            color: Colors.black,
+          ),
+          label: const Text(
             'Add Image',
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.primary,
-            ),
+            style: TextStyle(color: Colors.black),
           ),
         ),
       ],
