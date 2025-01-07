@@ -27,16 +27,17 @@ class _SelectServiceState extends State<SelectService11> {
     Service('Gardening', 'https://img.icons8.com/3d-fluency/94/garden.png'),
   ];
 
-  int selectedService = -1;
+  Set<int> selectedServices = {};
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      floatingActionButton: selectedService >= 0
+      floatingActionButton: selectedServices.isNotEmpty
           ? FloatingActionButton(
               onPressed: () {
                 Navigator.pushReplacementNamed(context, "/mainPage");
+                print("Selected services: $selectedServices");
               },
               backgroundColor: Colors.blue,
               child: const Icon(
@@ -54,7 +55,7 @@ class _SelectServiceState extends State<SelectService11> {
                 padding:
                     const EdgeInsets.only(top: 120.0, right: 20.0, left: 20.0),
                 child: Text(
-                  'what type of service \do you want to offer?',
+                  'Pick the services\n you can deliver',
                   style: TextStyle(
                     fontSize: 40,
                     color: Colors.grey.shade900,
@@ -82,7 +83,7 @@ class _SelectServiceState extends State<SelectService11> {
                   itemCount: services.length,
                   itemBuilder: (BuildContext context, int index) {
                     return FadeInUp(
-                        delay: Duration(milliseconds: 500 * index),
+                        delay: Duration(milliseconds: 350 * index),
                         child: serviceContainer(services[index].imageURL,
                             services[index].name, index));
                   },
@@ -100,10 +101,10 @@ class _SelectServiceState extends State<SelectService11> {
       onTap: () {
         setState(
           () {
-            if (selectedService == index) {
-              selectedService = -1;
+            if (selectedServices.contains(index)) {
+              selectedServices.remove(index);
             } else {
-              selectedService = index;
+              selectedServices.add(index);
             }
           },
         );
@@ -112,11 +113,11 @@ class _SelectServiceState extends State<SelectService11> {
         duration: const Duration(milliseconds: 300),
         padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
         decoration: BoxDecoration(
-          color: selectedService == index
+          color: selectedServices.contains(index)
               ? Colors.blue.shade50
               : Colors.grey.shade100,
           border: Border.all(
-            color: selectedService == index
+            color: selectedServices.contains(index)
                 ? Colors.blue
                 : const Color.fromARGB(0, 33, 149, 243),
             width: 2.0,
@@ -132,6 +133,7 @@ class _SelectServiceState extends State<SelectService11> {
             ),
             Text(
               name,
+              textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 18,
               ),

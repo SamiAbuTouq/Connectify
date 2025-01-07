@@ -18,9 +18,9 @@ class _SelectServiceState extends State<SelectService12> {
         'https://img.icons8.com/3d-fluency/94/fridge.png'),
     Service(
         'Television Repair', 'https://img.icons8.com/3d-fluency/94/hdtv.png'),
-    Service('Washing Machine & Dryer Repair',
+    Service('Washing Machine',
         'https://img.icons8.com/3d-fluency/94/washing-machine.png'),
-    Service('Microwave and Oven Repair',
+    Service('Microwave & Oven Repair',
         'https://img.icons8.com/3d-fluency/94/cooker--v3.png'),
   ];
 
@@ -130,6 +130,7 @@ class _SelectServiceState extends State<SelectService12> {
             ),
             Text(
               name,
+              textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 18,
               ),

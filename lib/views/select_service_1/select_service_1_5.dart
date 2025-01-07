@@ -134,6 +134,7 @@ class _SelectServiceState extends State<SelectService15> {
             ),
             Text(
               name,
+              textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 18,
               ),
