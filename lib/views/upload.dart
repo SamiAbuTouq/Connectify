@@ -154,7 +154,7 @@ class _HomePageState extends State<HomePage> {
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text("Error: Cannot Upload Your Photo"),
+                            content: Text("You must upload a profile photo"),
                           ),
                         );
                       }

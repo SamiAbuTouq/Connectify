@@ -14,13 +14,14 @@ class SelectService16 extends StatefulWidget {
 
 class _SelectServiceState extends State<SelectService16> {
   List<Service> services = [
-    Service('Security Service', 'https://icons8.com/icon/gYwsCw0Jrka9/soldier'),
-    Service('Photography & Videography',
-        'https://icons8.com/icon/ledoOw5M8qvM/camera'),
     Service(
-        'Catering Services', 'https://icons8.com/icon/dkL9eYC61t89/tableware'),
+        'Security Service', 'https://img.icons8.com/fluency/48/soldier.png'),
+    Service('Photography & Videography',
+        'https://img.icons8.com/3d-fluency/94/camera.png'),
+    Service('Catering Services',
+        'https://img.icons8.com/3d-fluency/94/tableware.png'),
     Service('Decoration Services',
-        'https://icons8.com/icon/YNLNxWJLEHLB/party-balloons'),
+        'https://img.icons8.com/3d-fluency/94/party-baloons.png'),
   ];
 
   Set<int> selectedServices = {};
@@ -32,7 +33,7 @@ class _SelectServiceState extends State<SelectService16> {
       floatingActionButton: selectedServices.isNotEmpty
           ? FloatingActionButton(
               onPressed: () {
-                // Handle navigation for multiple services
+                Navigator.pushReplacementNamed(context, "/mainPage");
                 print("Selected services: $selectedServices");
               },
               backgroundColor: Colors.blue,
@@ -79,7 +80,7 @@ class _SelectServiceState extends State<SelectService16> {
                   itemCount: services.length,
                   itemBuilder: (BuildContext context, int index) {
                     return FadeInUp(
-                        delay: Duration(milliseconds: 500 * index),
+                        delay: Duration(milliseconds: 350 * index),
                         child: serviceContainer(services[index].imageURL,
                             services[index].name, index));
                   },

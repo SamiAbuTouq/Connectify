@@ -24,10 +24,10 @@ class _SelectServiceState extends State<SelectService> {
         'https://img.icons8.com/3d-fluency/94/welfare.png'),
     Service('Educational & Tutoring',
         'https://img.icons8.com/3d-fluency/94/reading.png'),
-    Service('Cleaning',
-        'https://img.icons8.com/external-vitaliy-gorbachev-flat-vitaly-gorbachev/2x/external-cleaning-labour-day-vitaliy-gorbachev-flat-vitaly-gorbachev.png'),
     Service(
         'Event Support', 'https://img.icons8.com/3d-fluency/94/confetti.png'),
+    Service('Cleaning',
+        'https://img.icons8.com/external-vitaliy-gorbachev-flat-vitaly-gorbachev/2x/external-cleaning-labour-day-vitaliy-gorbachev-flat-vitaly-gorbachev.png'),
   ];
 
   int selectedService = -1;
@@ -39,8 +39,7 @@ class _SelectServiceState extends State<SelectService> {
       floatingActionButton: selectedService >= 0
           ? FloatingActionButton(
               onPressed: () {
-                Navigator.pushReplacementNamed(
-                    context, "/service${selectedService + 1}");
+                Navigator.pushNamed(context, "/service${selectedService + 1}");
               },
               backgroundColor: Colors.blue,
               child: const Icon(

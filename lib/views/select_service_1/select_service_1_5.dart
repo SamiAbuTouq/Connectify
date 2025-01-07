@@ -14,17 +14,18 @@ class SelectService15 extends StatefulWidget {
 
 class _SelectServiceState extends State<SelectService15> {
   List<Service> services = [
-    Service('Mathematics', 'https://icons8.com/icon/QM0dP5g8D4UH/math'),
-    Service('Physics', 'https://icons8.com/icon/RPHZmB5ERyjp/physics'),
-    Service('Chemistry', 'https://icons8.com/icon/VFobzwFtpruV/molecule'),
-    Service('Biology', 'https://icons8.com/icon/lIjOYS10WPHg/biotech'),
-    Service('Languages', 'https://icons8.com/icon/10lwQw8Al1lP/language'),
-    Service('History', 'https://icons8.com/icon/PyrI7GCv8LCv/scroll'),
-    Service('Computer Science', 'Computer Science'),
-    Service(
-        'Drawing & Sketching', 'https://icons8.com/icon/aoq1o9KzihEZ/easel'),
+    Service('Mathematics', 'https://img.icons8.com/3d-fluency/94/math.png'),
+    Service('Physics', 'https://img.icons8.com/3d-fluency/94/physics.png'),
+    Service('Chemistry', 'https://img.icons8.com/3d-fluency/94/molecule.png'),
+    Service('Biology', 'https://img.icons8.com/3d-fluency/94/biotech.png'),
+    Service('Languages', 'https://img.icons8.com/3d-fluency/94/language.png'),
+    Service('History', 'https://img.icons8.com/3d-fluency/94/scroll.png'),
+    Service('Computer Science',
+        'https://img.icons8.com/3d-fluency/94/science-fiction.png'),
+    Service('Drawing & Sketching',
+        'https://img.icons8.com/3d-fluency/94/easel.png'),
     Service('Music & Performance',
-        'https://icons8.com/icon/ESNAOBMGxN0m/grand-piano'),
+        'https://img.icons8.com/fluency/94/grand-piano.png'),
   ];
 
   Set<int> selectedServices = {};
@@ -36,7 +37,7 @@ class _SelectServiceState extends State<SelectService15> {
       floatingActionButton: selectedServices.isNotEmpty
           ? FloatingActionButton(
               onPressed: () {
-                // Handle navigation for multiple services
+                Navigator.pushReplacementNamed(context, "/mainPage");
                 print("Selected services: $selectedServices");
               },
               backgroundColor: Colors.blue,
@@ -83,7 +84,7 @@ class _SelectServiceState extends State<SelectService15> {
                   itemCount: services.length,
                   itemBuilder: (BuildContext context, int index) {
                     return FadeInUp(
-                        delay: Duration(milliseconds: 500 * index),
+                        delay: Duration(milliseconds: 350 * index),
                         child: serviceContainer(services[index].imageURL,
                             services[index].name, index));
                   },
@@ -127,7 +128,7 @@ class _SelectServiceState extends State<SelectService15> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image.network(image, height: 70),
+            Image.network(image, height: 80),
             const SizedBox(
               height: 20,
             ),

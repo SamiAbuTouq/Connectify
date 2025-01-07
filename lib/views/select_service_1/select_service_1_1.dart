@@ -15,14 +15,16 @@ class SelectService11 extends StatefulWidget {
 
 class _SelectServiceState extends State<SelectService11> {
   List<Service> services = [
-    Service('Electrician', 'https://icons8.com/icon/PQn9wpEzc0Gj/electrician'),
-    Service('Carpenter', 'https://icons8.com/icon/tNE4bATltVsL/saw'),
-    Service('Painting', 'https://icons8.com/icon/9TqTwCc0UVkM/paint-roller'),
+    Service('Electrician',
+        'https://img.icons8.com/external-soft-fill-juicy-fish/60/external-electrician-key-workers-soft-fill-soft-fill-juicy-fish.png'),
+    Service('Carpenter', 'https://img.icons8.com/3d-fluency/94/saw.png'),
+    Service(
+        'Painting', 'https://img.icons8.com/3d-fluency/94/roller-brush.png'),
     Service('Plumber',
         'https://img.icons8.com/?size=100&id=xFN45rDF7HLr&format=png&color=000000'),
-    Service('HVAC', 'https://icons8.com/icon/13151/cooling'),
-    Service('Pest Control', 'https://icons8.com/icon/qkaeABjCUYMw/no-fly'),
-    Service('Gardening', 'https://icons8.com/icon/htOOvGIOQJR2/garden'),
+    Service('HVAC', 'https://img.icons8.com/fluency/48/heat-and-cool.png'),
+    Service('Pest Control', 'https://img.icons8.com/color/48/no-fly.png'),
+    Service('Gardening', 'https://img.icons8.com/3d-fluency/94/garden.png'),
   ];
 
   int selectedService = -1;
@@ -34,8 +36,7 @@ class _SelectServiceState extends State<SelectService11> {
       floatingActionButton: selectedService >= 0
           ? FloatingActionButton(
               onPressed: () {
-                Navigator.pushReplacementNamed(
-                    context, "/service${selectedService + 1}");
+                Navigator.pushReplacementNamed(context, "/mainPage");
               },
               backgroundColor: Colors.blue,
               child: const Icon(
@@ -125,7 +126,7 @@ class _SelectServiceState extends State<SelectService11> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image.network(image, height: 70),
+            Image.network(image, height: 80),
             const SizedBox(
               height: 20,
             ),

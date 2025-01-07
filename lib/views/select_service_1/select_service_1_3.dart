@@ -15,11 +15,11 @@ class SelectService13 extends StatefulWidget {
 class _SelectServiceState extends State<SelectService13> {
   List<Service> services = [
     Service('Network Setup',
-        'https://img.icons8.com/3d-fluency/94/home-automation.png'),
+        'https://img.icons8.com/3d-fluency/94/wi-fi-connected.png'),
     Service('Smart Home Installation',
-        'https://img.icons8.com/3d-fluency/94/maintenance.png'),
+        'https://img.icons8.com/3d-fluency/94/smart-home.png'),
     Service('Technology & IT',
-        'https://img.icons8.com/3d-fluency/94/workstation.png'),
+        'https://img.icons8.com/3d-fluency/94/smartphone-tablet.png'),
   ];
 
   Set<int> selectedServices = {};
@@ -31,7 +31,7 @@ class _SelectServiceState extends State<SelectService13> {
       floatingActionButton: selectedServices.isNotEmpty
           ? FloatingActionButton(
               onPressed: () {
-                // Handle navigation for multiple services
+                Navigator.pushReplacementNamed(context, "/mainPage");
                 print("Selected services: $selectedServices");
               },
               backgroundColor: Colors.blue,
@@ -78,7 +78,7 @@ class _SelectServiceState extends State<SelectService13> {
                   itemCount: services.length,
                   itemBuilder: (BuildContext context, int index) {
                     return FadeInUp(
-                        delay: Duration(milliseconds: 500 * index),
+                        delay: Duration(milliseconds: 350 * index),
                         child: serviceContainer(services[index].imageURL,
                             services[index].name, index));
                   },
@@ -122,7 +122,7 @@ class _SelectServiceState extends State<SelectService13> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image.network(image, height: 70),
+            Image.network(image, height: 80),
             const SizedBox(
               height: 20,
             ),
