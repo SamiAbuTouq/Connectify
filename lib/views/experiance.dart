@@ -1,0 +1,120 @@
+import 'package:flutter/material.dart';
+
+class Experiance extends StatefulWidget {
+  const Experiance({super.key});
+
+  @override
+  State<Experiance> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<Experiance> {
+  final _formKey = GlobalKey<FormState>();
+  String? _selectedDuration;
+  final TextEditingController _optionalInfoController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Image.asset(
+          'assets/images/logo/small-logo.png',
+          width: 250,
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(25, 40, 25, 0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "Select Your Experience",
+                style: TextStyle(fontSize: 16),
+              ),
+              const SizedBox(height: 7),
+              DropdownButtonFormField<String>(
+                value: _selectedDuration,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                ),
+                items: const [
+                  DropdownMenuItem(
+                      value: "less than 1 Year",
+                      child: Text("less than 1 Year")),
+                  DropdownMenuItem(value: "1 Year", child: Text("1 Year")),
+                  DropdownMenuItem(value: "2 Year", child: Text("2 Year")),
+                  DropdownMenuItem(value: "4 Year", child: Text("4 Year")),
+                  DropdownMenuItem(value: "3 Year", child: Text("3 Year")),
+                  DropdownMenuItem(
+                      value: "5 to 10 Year", child: Text("5 to 10 Year")),
+                  DropdownMenuItem(value: "+10 Year", child: Text("+10 Year")),
+                ],
+                onChanged: (value) {
+                  setState(() {
+                    _selectedDuration = value;
+                  });
+                },
+                validator: (value) {
+                  if (value == null) {
+                    return "Please select a duration.";
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 30),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'More information (Optional)',
+                  ),
+                  const SizedBox(height: 7),
+                  TextFormField(
+                    controller: _optionalInfoController,
+                    decoration: const InputDecoration(
+                      hintText: "write here...",
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  icon: const Icon(Icons.arrow_forward),
+                  iconAlignment: IconAlignment.end,
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(double.infinity, 50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    iconColor: Colors.white,
+                    iconSize: 22,
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.black,
+                    side: const BorderSide(
+                        color: Color.fromARGB(255, 255, 255, 255), width: 2),
+                    elevation: 20,
+                    shadowColor: const Color.fromARGB(255, 0, 0, 0)
+                        .withValues(alpha: 40),
+                  ),
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      Navigator.pushNamed(context, "/selectService");
+                    }
+                  },
+                  label: const Text(
+                    "Next",
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

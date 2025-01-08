@@ -1,5 +1,5 @@
 import 'splash.dart';
-import 'main_Page.dart';
+import 'main_page.dart';
 import '/views/login.dart';
 import '/views/start.dart';
 import '/views/signup.dart';
@@ -18,6 +18,7 @@ import '../views/select_service_1/select_service_1_4.dart';
 import '../views/select_service_1/select_service_1_5.dart';
 import '../views/select_service_1/select_service_1_6.dart';
 import '../views/select_service_1/cleaning.dart';
+import '../views/experiance.dart';
 
 final Map<String, WidgetBuilder> appRoutes = {
   "/": (context) => const CheckUser(),
@@ -38,6 +39,7 @@ final Map<String, WidgetBuilder> appRoutes = {
   "/service5": (context) => const SelectService15(),
   "/service6": (context) => const SelectService16(),
   "/service7": (context) => const SelectService17(),
+  "/experiance": (context) => const Experiance(),
 };
 
 class CheckUser extends StatefulWidget {

@@ -92,7 +92,7 @@ class _ImLookingForState extends State<ImLookingForScreen> {
               ),
               onPressed: () {
                 if (select1) {
-                  Navigator.pushNamed(context, "/selectService");
+                  Navigator.pushNamed(context, "/experiance");
                 } else if (select2) {
                   Navigator.pushNamed(context, "/mainPage");
                 } else {
