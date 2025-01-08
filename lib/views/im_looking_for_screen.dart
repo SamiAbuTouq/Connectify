@@ -44,7 +44,7 @@ class _ImLookingForState extends State<ImLookingForScreen> {
                 });
               },
               child: SelectContainerWidget(
-                title1: 'Service Providers',
+                title1: 'Service Provider',
                 title2: "I offer professional services",
                 img: select1
                     ? 'assets/images/others/check.png'
