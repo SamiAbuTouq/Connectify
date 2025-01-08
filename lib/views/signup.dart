@@ -22,14 +22,19 @@ var buttonStyle = ElevatedButton.styleFrom(
   backgroundColor: Colors.black,
   side: const BorderSide(color: Color.fromARGB(255, 255, 255, 255), width: 2),
   elevation: 20,
-  shadowColor: const Color.fromARGB(255, 0, 0, 0).withValues(alpha: 40),
+  shadowColor: const Color.fromARGB(255, 0, 0, 0).withAlpha(40),
 );
 
 class _SignupPageState extends State<SignupPage> {
   final formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _reenterPasswordController =
+      TextEditingController();
   final GoogleSignIn googleSignIn = GoogleSignIn();
+
+  bool _isPasswordVisible = false;
+  bool _isReenterPasswordVisible = false;
 
   Future<UserCredential> signInWithGoogle() async {
     try {
@@ -42,9 +47,6 @@ class _SignupPageState extends State<SignupPage> {
 
       if (googleUser == null) {
         // User canceled the sign-in process
-        // ScaffoldMessenger.of(context).showSnackBar(
-        //   SnackBar(content: Text('Google sign-in was canceled.')),
-        // );
         return Future.error('Sign-in canceled by user.');
       }
 
@@ -139,14 +141,57 @@ class _SignupPageState extends State<SignupPage> {
                           width: MediaQuery.of(context).size.width * .9,
                           child: TextFormField(
                             validator: (value) => value!.length < 8
-                                ? "Password should have atleast 8 characters."
+                                ? "Password should have at least 8 characters."
                                 : null,
                             controller: _passwordController,
-                            obscureText: true,
-                            decoration: const InputDecoration(
-                              prefixIcon: Icon(Icons.password_outlined),
-                              border: OutlineInputBorder(),
-                              label: Text("Password"),
+                            obscureText: !_isPasswordVisible,
+                            decoration: InputDecoration(
+                              prefixIcon: const Icon(Icons.password_outlined),
+                              border: const OutlineInputBorder(),
+                              label: const Text("Password"),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _isPasswordVisible
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _isPasswordVisible = !_isPasswordVisible;
+                                  });
+                                },
+                              ),
+                            ),
+                          )),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      SizedBox(
+                          width: MediaQuery.of(context).size.width * .9,
+                          child: TextFormField(
+                            validator: (value) =>
+                                value != _passwordController.text
+                                    ? "Passwords do not match."
+                                    : null,
+                            controller: _reenterPasswordController,
+                            obscureText: !_isReenterPasswordVisible,
+                            decoration: InputDecoration(
+                              prefixIcon: const Icon(Icons.password_outlined),
+                              border: const OutlineInputBorder(),
+                              label: const Text("Re-enter Password"),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _isReenterPasswordVisible
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _isReenterPasswordVisible =
+                                        !_isReenterPasswordVisible;
+                                  });
+                                },
+                              ),
                             ),
                           )),
                       const SizedBox(
@@ -173,7 +218,7 @@ class _SignupPageState extends State<SignupPage> {
                                           .restorablePushNamedAndRemoveUntil(
                                               context,
                                               "/home",
-                                              (route) => false); //!home
+                                              (route) => false);
                                     } else {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
