@@ -153,54 +153,49 @@ class _LoginPageState extends State<LoginPage> {
                       const SizedBox(
                         height: 18,
                       ),
-                      Row(
-                        children: [
-                          Center(
-                            child: SizedBox(
-                              height: 55,
-                              width: MediaQuery.of(context).size.width * .88,
-                              //MediaQuery.of(context).size --> gives the dimensions of the screen
-                              child: ElevatedButton.icon(
-                                icon: const Icon(Icons.arrow_forward),
-                                iconAlignment: IconAlignment.end,
-                                style: _buttonStyle,
-                                onPressed: () {
-                                  if (formKey.currentState!.validate()) {
-                                    AuthService()
-                                        .loginWithEmail(_emailController.text,
-                                            _passwordController.text)
-                                        .then(
-                                      (value) {
-                                        if (value == "Login Successful") {
-                                          Navigator
-                                              .restorablePushNamedAndRemoveUntil(
-                                                  context,
-                                                  "/mainPage",
-                                                  (route) => false);
-                                        } else {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
-                                            content: Text(
-                                              value,
-                                              style: const TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                            backgroundColor:
-                                                Colors.red.shade400,
-                                          ));
-                                        }
-                                      },
-                                    );
-                                  }
-                                },
-                                label: const Text(
-                                  "Login",
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                              ),
+                      Center(
+                        child: SizedBox(
+                          height: 55,
+                          width: MediaQuery.of(context).size.width * .88,
+                          //MediaQuery.of(context).size --> gives the dimensions of the screen
+                          child: ElevatedButton.icon(
+                            icon: const Icon(Icons.arrow_forward),
+                            iconAlignment: IconAlignment.end,
+                            style: _buttonStyle,
+                            onPressed: () {
+                              if (formKey.currentState!.validate()) {
+                                AuthService()
+                                    .loginWithEmail(_emailController.text,
+                                        _passwordController.text)
+                                    .then(
+                                  (value) {
+                                    if (value == "Login Successful") {
+                                      Navigator
+                                          .restorablePushNamedAndRemoveUntil(
+                                              context,
+                                              "/mainPage",
+                                              (route) => false);
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content: Text(
+                                          value,
+                                          style: const TextStyle(
+                                              color: Colors.white),
+                                        ),
+                                        backgroundColor: Colors.red.shade400,
+                                      ));
+                                    }
+                                  },
+                                );
+                              }
+                            },
+                            label: const Text(
+                              "Login",
+                              style: TextStyle(fontSize: 16),
                             ),
                           ),
-                        ],
+                        ),
                       ),
                       const SizedBox(
                         height: 18,

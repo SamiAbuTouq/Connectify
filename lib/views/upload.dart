@@ -97,90 +97,89 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.all(40),
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 50,
-                ),
-                UserImagePicker(
-                  onPickImage: (pickedImage) {
-                    _selectedImage = pickedImage;
-                  },
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Form(
-                  key: _formKey,
-                  child: TextFormField(
-                    controller: _usernameController,
-                    decoration: const InputDecoration(
-                      labelText: 'Username',
-                      focusColor: Colors.black,
-                      prefixIcon: Icon(Icons.person),
-                      border: OutlineInputBorder(),
-                      labelStyle:
-                          TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Color.fromARGB(255, 0, 0, 0), width: 2.0),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 120,
+            ),
+            UserImagePicker(
+              onPickImage: (pickedImage) {
+                _selectedImage = pickedImage;
+              },
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(40, 10, 40, 10),
+              child: Column(
+                children: [
+                  Form(
+                    key: _formKey,
+                    child: TextFormField(
+                      controller: _usernameController,
+                      decoration: const InputDecoration(
+                        labelText: 'Username',
+                        focusColor: Colors.black,
+                        prefixIcon: Icon(Icons.person),
+                        border: OutlineInputBorder(),
+                        labelStyle:
+                            TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Color.fromARGB(255, 0, 0, 0), width: 2.0),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Username is required.';
+                        } else if (value.trim().length <= 2) {
+                          return 'Username must be more than 2 characters.';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
+                    height: 55,
+                    width: MediaQuery.of(context).size.width * .88,
+                    child: ElevatedButton.icon(
+                      icon: const Icon(Icons.arrow_forward),
+                      iconAlignment: IconAlignment.end,
+                      style: _buttonStyle,
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          final result =
+                              await uploadToCloudinary1(_selectedImage);
+
+                          if (result) {
+                            Navigator.pushNamed(context, "/imLookingFor");
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content:
+                                    Text("You must upload a profile photo"),
+                              ),
+                            );
+                          }
+                        }
+                      },
+                      label: const Text(
+                        "Next",
+                        style: TextStyle(fontSize: 16),
                       ),
                     ),
-                    validator: (value) {
-                      if (value == null || value.trim().isEmpty) {
-                        return 'Username is required.';
-                      } else if (value.trim().length <= 2) {
-                        return 'Username must be more than 2 characters.';
-                      }
-                      return null;
-                    },
                   ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                SizedBox(
-                  height: 55,
-                  width: MediaQuery.of(context).size.width * .88,
-                  child: ElevatedButton.icon(
-                    icon: const Icon(Icons.arrow_forward),
-                    iconAlignment: IconAlignment.end,
-                    style: _buttonStyle,
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        final result =
-                            await uploadToCloudinary1(_selectedImage);
-
-                        if (result) {
-                          Navigator.pushNamed(context, "/imLookingFor");
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("You must upload a profile photo"),
-                            ),
-                          );
-                        }
-                      }
-                    },
-                    label: const Text(
-                      "Next",
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: _openFilePicker,
-      //   child: const Icon(Icons.add),
-      // ),
     );
   }
 }
