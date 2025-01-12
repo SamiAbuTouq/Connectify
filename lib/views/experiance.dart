@@ -72,6 +72,8 @@ class _HomePageState extends State<Experiance> {
                   const SizedBox(height: 7),
                   TextFormField(
                     controller: _optionalInfoController,
+                    minLines: 3,
+                    maxLines: null,
                     decoration: const InputDecoration(
                       hintText: "write here...",
                       border: OutlineInputBorder(),

@@ -43,7 +43,7 @@ class _CheckUserState extends State<CheckUser> {
     AuthService().isLoggedIn().then(
       (value) {
         if (value) {
-          Navigator.pushReplacementNamed(context, "/home");
+          Navigator.pushReplacementNamed(context, "/mainPage");
         } else {
           Navigator.pushReplacementNamed(context, "/splashScreen");
         }
