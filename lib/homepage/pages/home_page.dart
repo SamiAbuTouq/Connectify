@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _navigateToProfile(BuildContext context) {
-    Navigator.pop(context); // Close drawer
+    Navigator.pop(context);
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => Scaffold(
@@ -148,13 +148,13 @@ class _HomePageState extends State<HomePage> {
         title: Text(
           _showingSubServices ? _selectedService : 'Connectify',
           style: const TextStyle(
-            fontFamily: 'Roboto',
+            fontFamily: 'F1',
             color: Colors.white,
-            fontSize: 24,
+            fontSize: 26,
             fontWeight: FontWeight.bold,
           ),
         ),
-        centerTitle: true,
+        centerTitle: false,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       drawer: !_showingSubServices ? _buildDrawer() : null,
@@ -165,12 +165,14 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildDrawer() {
     return Drawer(
+      backgroundColor: Colors.white,
+      width: 275,
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
             decoration: const BoxDecoration(
-              color: Colors.blue,
+              color: Color.fromARGB(255, 33, 149, 243),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -240,45 +242,69 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildBottomAppBar() {
     return BottomAppBar(
-      height: 70,
-      color: Colors.deepOrangeAccent,
+      height: 60,
+      color: Colors.blue.shade700,
       shape: const CircularNotchedRectangle(),
       notchMargin: 8.0,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          IconButton(
-            icon: Icon(
-              Icons.home,
-              color: _selectedIndex == 0 ? Colors.blue : Colors.grey,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: List.generate(4, (index) {
+          final bool isSelected = _selectedIndex == index;
+
+          return GestureDetector(
+            onTap: () => setState(() => _selectedIndex = index),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+              padding: EdgeInsets.symmetric(horizontal: isSelected ? 10 : 0),
+              decoration: isSelected
+                  ? BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white.withOpacity(0.2),
+                    )
+                  : null,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    _getIconForIndex(index),
+                    color: isSelected
+                        ? const Color.fromARGB(255, 255, 255, 255)
+                        : const Color.fromARGB(255, 0, 0, 0),
+                    size: isSelected ? 28 : 24, // Larger size for selected icon
+                  ),
+                  if (isSelected)
+                    Container(
+                      margin: const EdgeInsets.only(top: 4),
+                      width: 4,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                ],
+              ),
             ),
-            onPressed: () => setState(() => _selectedIndex = 0),
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.search,
-              color: _selectedIndex == 1 ? Colors.blue : Colors.grey,
-            ),
-            onPressed: () => setState(() => _selectedIndex = 1),
-          ),
-          const SizedBox(width: 40),
-          IconButton(
-            icon: Icon(
-              Icons.notifications,
-              color: _selectedIndex == 2 ? Colors.blue : Colors.grey,
-            ),
-            onPressed: () => setState(() => _selectedIndex = 2),
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.person,
-              color: _selectedIndex == 3 ? Colors.blue : Colors.grey,
-            ),
-            onPressed: () => setState(() => _selectedIndex = 3),
-          ),
-        ],
+          );
+        }),
       ),
     );
+  }
+
+  IconData _getIconForIndex(int index) {
+    switch (index) {
+      case 0:
+        return Icons.home;
+      case 1:
+        return Icons.search;
+      case 2:
+        return Icons.notifications;
+      case 3:
+        return Icons.person;
+      default:
+        return Icons.error;
+    }
   }
 
   Widget _buildMainContent() {
