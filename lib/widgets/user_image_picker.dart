@@ -23,6 +23,7 @@ class _UserImagePickerState extends State<UserImagePicker> {
   // Function to show the bottom sheet for image source selection
   void _showImageSourceBottomSheet() {
     showModalBottomSheet(
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       context: context,
       builder: (ctx) => Padding(
         padding: const EdgeInsets.all(16.0),

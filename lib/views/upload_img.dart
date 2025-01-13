@@ -1,15 +1,13 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_cloudinary_file_upload/services/auth_service.dart';
-// import 'package:image_picker/image_picker.dart';
 import 'package:flutter_cloudinary_file_upload/widgets/user_image_picker.dart';
 import 'package:flutter_cloudinary_file_upload/services/cloudinary_service.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class UploadPhoto extends StatefulWidget {
+  const UploadPhoto({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<UploadPhoto> createState() => _UploadPhotoState();
 }
 
 File? _selectedImage;
@@ -30,72 +28,27 @@ var _buttonStyle = ElevatedButton.styleFrom(
   shadowColor: const Color.fromARGB(255, 0, 0, 0).withValues(alpha: 40),
 );
 
-class _HomePageState extends State<HomePage> {
-  // Function to open the file picker for images or videos
-  // void _openFilePicker() async {
-  //   // Show the dialog to choose between camera and gallery
-  //   showModalBottomSheet(
-  //     context: context,
-  //     builder: (ctx) => Padding(
-  //       padding: const EdgeInsets.all(16.0),
-  //       child: Column(
-  //         mainAxisSize: MainAxisSize.min,
-  //         children: [
-  //           ListTile(
-  //             leading: const Icon(Icons.camera_alt),
-  //             title: const Text('Take a photo'),
-  //             onTap: () async {
-  //               Navigator.pop(context); // Close the dialog
-  //               XFile? image =
-  //                   await _picker.pickImage(source: ImageSource.camera);
-  //               if (image != null) {
-  //                 Navigator.pushNamed(context, "/upload",
-  //                     arguments: image); // Pass XFile
-  //               }
-  //             },
-  //           ),
-  //           ListTile(
-  //             leading: const Icon(Icons.image),
-  //             title: const Text('Choose from gallery'),
-  //             onTap: () async {
-  //               Navigator.pop(context); // Close the dialog
-  //               XFile? image = await _picker.pickImage(
-  //                 source: ImageSource.gallery,
-  //                 imageQuality: 100, // Maximum quality
-  //               );
-  //               if (image != null) {
-  //                 Navigator.pushReplacementNamed(context, "/upload",
-  //                     arguments: image); // Pass XFile
-  //               }
-  //             },
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
+class _UploadPhotoState extends State<UploadPhoto> {
   @override
   Widget build(BuildContext context) {
-    // final File selectedFile =
-    //     ModalRoute.of(context)!.settings.arguments as File;
-
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: Image.asset(
           'assets/images/logo/small-logo.png',
           width: 250,
         ),
         //  Text("Connectify")
-        actions: [
-          IconButton(
-            onPressed: () async {
-              await AuthService().logout();
-              Navigator.pushReplacementNamed(context, "/login");
-            },
-            icon: Icon(Icons.logout),
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //     onPressed: () async {
+        //       await AuthService().logout();
+        //       Navigator.pushReplacementNamed(context, "/login");
+        //     },
+        //     icon: Icon(Icons.logout),
+        //   ),
+        // ],
       ),
       body: SingleChildScrollView(
         child: Column(

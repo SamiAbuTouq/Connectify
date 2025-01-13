@@ -76,7 +76,7 @@ class _SignupPageState extends State<SignupPage> {
           'image_url': user.photoURL,
         }, SetOptions(merge: true));
       }
-      Navigator.pushReplacementNamed(context, "/home");
+      Navigator.pushReplacementNamed(context, "/uploadPhoto");
 
       return userCredential;
     } catch (error) {
@@ -91,6 +91,7 @@ class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       body: Form(
         key: formKey,
         child: Center(
@@ -214,11 +215,8 @@ class _SignupPageState extends State<SignupPage> {
                                     .then(
                                   (value) {
                                     if (value == "Account Created") {
-                                      Navigator
-                                          .restorablePushNamedAndRemoveUntil(
-                                              context,
-                                              "/home",
-                                              (route) => false);
+                                      Navigator.pushNamedAndRemoveUntil(context,
+                                          "/uploadPhoto", (route) => false);
                                     } else {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(

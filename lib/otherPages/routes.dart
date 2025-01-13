@@ -1,33 +1,31 @@
 import 'splash.dart';
-import 'main_page.dart';
 import '/views/login.dart';
 import '/views/start.dart';
 import '/views/signup.dart';
-import '../views/upload.dart';
-import '/views/upload_area.dart';
+import '../views/upload_img.dart';
+import '../views/experiance.dart';
 import '/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import '../views/select_service_1.dart';
-// import '../views/select_service_2.dart';
+import '../homepage/pages/home_page.dart';
 import '../views/im_looking_for_screen.dart';
 import '/onboarding/onboarding_screens.dart';
+import '../views/select_service_1/cleaning.dart';
 import '../views/select_service_1/select_service_1_1.dart';
 import '../views/select_service_1/select_service_1_2.dart';
 import '../views/select_service_1/select_service_1_3.dart';
 import '../views/select_service_1/select_service_1_4.dart';
 import '../views/select_service_1/select_service_1_5.dart';
 import '../views/select_service_1/select_service_1_6.dart';
-import '../views/select_service_1/cleaning.dart';
-import '../views/experiance.dart';
+import 'package:flutter_cloudinary_file_upload/otherPages/send_message.dart';
 
 final Map<String, WidgetBuilder> appRoutes = {
   "/": (context) => const CheckUser(),
-  "/home": (context) => const HomePage(),
+  "/uploadPhoto": (context) => const UploadPhoto(),
   "/login": (context) => const LoginPage(),
   "/signup": (context) => const SignupPage(),
-  "/upload": (context) => const UploadArea(),
   "/splashScreen": (context) => const SplashScreen(),
-  "/mainPage": (context) => const MainPage(),
+  "/homePage": (context) => const HomePage(),
   "/onboardingScreens": (context) => const OnboardingScreens(),
   "/startPage": (context) => const StartPage(),
   "/imLookingFor": (context) => const ImLookingForScreen(),
@@ -40,6 +38,7 @@ final Map<String, WidgetBuilder> appRoutes = {
   "/service6": (context) => const SelectService16(),
   "/service7": (context) => const SelectService17(),
   "/experiance": (context) => const Experiance(),
+  "/sendMessagePage": (context) => const SendMessagePage(),
 };
 
 class CheckUser extends StatefulWidget {
@@ -54,7 +53,7 @@ class _CheckUserState extends State<CheckUser> {
   void initState() {
     AuthService().isLoggedIn().then((value) {
       if (value) {
-        Navigator.pushReplacementNamed(context, "/home");
+        Navigator.pushReplacementNamed(context, "/homePage");
       } else {
         Navigator.pushReplacementNamed(context, "/splashScreen");
       }

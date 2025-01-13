@@ -28,11 +28,11 @@ class _SplashScreenState extends State<SplashScreen> {
       width: MediaQuery.of(context).size.width,
       decoration: const BoxDecoration(
         gradient: LinearGradient(
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
           colors: [
             Color.fromARGB(255, 255, 255, 255),
-            Color.fromARGB(255, 174, 176, 177),
+            Color.fromARGB(255, 199, 200, 200),
           ],
         ),
       ),

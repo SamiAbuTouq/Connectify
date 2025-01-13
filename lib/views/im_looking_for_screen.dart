@@ -16,6 +16,7 @@ class _ImLookingForState extends State<ImLookingForScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         leading: Padding(
           padding: const EdgeInsets.only(left: 24),
@@ -94,7 +95,11 @@ class _ImLookingForState extends State<ImLookingForScreen> {
                 if (select1) {
                   Navigator.pushNamed(context, "/experiance");
                 } else if (select2) {
-                  Navigator.pushNamed(context, "/mainPage");
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    "/homePage",
+                    (route) => false,
+                  );
                 } else {
                   // Show an alert if no option is selected
                   ScaffoldMessenger.of(context).showSnackBar(

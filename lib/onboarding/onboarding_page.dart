@@ -79,6 +79,7 @@ class OnboardingPage extends StatelessWidget {
                 child: Text(
                   title,
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                        color: const Color.fromARGB(255, 0, 0, 0),
                         fontFamily: 'F2',
                       ),
                   textAlign: TextAlign.center,
@@ -93,6 +94,7 @@ class OnboardingPage extends StatelessWidget {
                   description,
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         fontFamily: 'F6',
+                        color: const Color.fromARGB(255, 0, 0, 0),
                       ),
                   textAlign: TextAlign.center,
                 ),

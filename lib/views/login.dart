@@ -72,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
           'image_url': user.photoURL,
         }, SetOptions(merge: true));
       }
-      Navigator.pushReplacementNamed(context, "/mainPage");
+      Navigator.pushReplacementNamed(context, "/homePage");
 
       return userCredential;
     } catch (error) {
@@ -87,6 +87,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       body: Form(
         key: formKey,
         child: Center(
@@ -138,9 +139,9 @@ class _LoginPageState extends State<LoginPage> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * .9,
                         child: TextFormField(
-                          validator: (value) => value!.length < 8
-                              ? "Password should have atleast 8 characters."
-                              : null,
+                          // validator: (value) => value!.length < 8
+                          //     ? "Password should have atleast 8 characters."
+                          //     : null,
                           controller: _passwordController,
                           obscureText: true,
                           decoration: const InputDecoration(
@@ -173,7 +174,7 @@ class _LoginPageState extends State<LoginPage> {
                                       Navigator
                                           .restorablePushNamedAndRemoveUntil(
                                               context,
-                                              "/mainPage",
+                                              "/homePage",
                                               (route) => false);
                                     } else {
                                       ScaffoldMessenger.of(context)

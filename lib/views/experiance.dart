@@ -15,6 +15,7 @@ class _HomePageState extends State<Experiance> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Image.asset(
           'assets/images/logo/small-logo.png',
@@ -35,6 +36,7 @@ class _HomePageState extends State<Experiance> {
               const SizedBox(height: 7),
               DropdownButtonFormField<String>(
                 value: _selectedDuration,
+                hint: const Text("Select years of experience"),
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                 ),

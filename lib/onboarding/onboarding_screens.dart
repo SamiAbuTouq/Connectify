@@ -82,6 +82,7 @@ class _OnboardingScreenState extends State<OnboardingScreens>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 255, 250, 250),
       body: Stack(
         children: [
           PageView.builder(
@@ -177,7 +178,7 @@ class _OnboardingScreenState extends State<OnboardingScreens>
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 32,
-                              vertical: 16,
+                              vertical: 12,
                             ),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30),
