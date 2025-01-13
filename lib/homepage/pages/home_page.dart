@@ -38,14 +38,20 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _navigateToProfile(BuildContext context) {
-    Navigator.pop(context);
-    Navigator.of(context).push(
+    Navigator.push(
+      context,
       MaterialPageRoute(
         builder: (context) => Scaffold(
+          backgroundColor: Colors.white,
           appBar: AppBar(
-            title: const Text('Profile'),
-            backgroundColor: Colors.white,
-            foregroundColor: Colors.grey.shade900,
+            title: const Text(
+              'Profile',
+              style: TextStyle(
+                  fontFamily: "F1",
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
+            ),
+            backgroundColor: Colors.blue,
             elevation: 0,
           ),
           body: FadeInUp(
@@ -98,9 +104,13 @@ class _HomePageState extends State<HomePage> {
                       // Handle edit profile
                     },
                     style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
                       minimumSize: const Size(double.infinity, 50),
                     ),
-                    child: const Text('Edit Profile'),
+                    child: const Text(
+                      'Edit Profile',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ],
               ),
@@ -116,16 +126,19 @@ class _HomePageState extends State<HomePage> {
       context,
       MaterialPageRoute(
         builder: (context) => Scaffold(
+          backgroundColor: Colors.white,
           appBar: AppBar(
-            title: const Text('Payment Methods'),
+            title: const Text(
+              'Payment Methods',
+              style: TextStyle(
+                fontFamily: "F1",
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
             backgroundColor: Colors.blue,
           ),
-          body: const Center(
-            child: Text(
-              'Manage your payment methods here.',
-              style: TextStyle(fontSize: 18),
-            ),
-          ),
+          body: PaymentMethodsScreen(),
         ),
       ),
     );
@@ -278,7 +291,7 @@ class _HomePageState extends State<HomePage> {
                       margin: const EdgeInsets.only(top: 4),
                       width: 4,
                       height: 4,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.white,
                         shape: BoxShape.circle,
                       ),
@@ -297,11 +310,11 @@ class _HomePageState extends State<HomePage> {
       case 0:
         return Icons.home;
       case 1:
-        return Icons.search;
+        return Icons.calendar_month_rounded;
       case 2:
-        return Icons.notifications;
+        return Icons.bookmark_outline_rounded;
       case 3:
-        return Icons.person;
+        return Icons.people;
       default:
         return Icons.error;
     }
@@ -316,11 +329,16 @@ class _HomePageState extends State<HomePage> {
       case 0:
         return _buildHomeContent();
       case 1:
-        return FadeInUp(child: const Center(child: Text('Search Page')));
+        return FadeInUp(
+            child: const Center(child: Text('your bookings will appear here')));
       case 2:
-        return FadeInUp(child: const Center(child: Text('Notifications')));
+        return FadeInUp(
+            child:
+                const Center(child: Text('here you can see your bookmarks')));
       case 3:
-        return FadeInUp(child: const Center(child: Text('Profile')));
+        return FadeInUp(
+            child: const Center(
+                child: Text('here you can see all service providers')));
       default:
         return _buildHomeContent();
     }
@@ -391,6 +409,9 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const SizedBox(
+                      height: 25,
+                    ),
                     Text(
                       'Hello, ${_userProfile.name.split(' ')[0]}',
                       style: TextStyle(
@@ -407,19 +428,19 @@ class _HomePageState extends State<HomePage> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Search services',
-                        prefixIcon: const Icon(Icons.search),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide.none,
-                        ),
-                        filled: true,
-                        fillColor: Colors.grey.shade100,
-                      ),
-                    ),
+                    const SizedBox(height: 5),
+                    // TextField(
+                    //   decoration: InputDecoration(
+                    //     hintText: 'Search services',
+                    //     prefixIcon: const Icon(Icons.search),
+                    //     border: OutlineInputBorder(
+                    //       borderRadius: BorderRadius.circular(10),
+                    //       borderSide: BorderSide.none,
+                    //     ),
+                    //     filled: true,
+                    //     fillColor: Colors.grey.shade100,
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -443,6 +464,81 @@ class _HomePageState extends State<HomePage> {
             );
           },
         ),
+      ),
+    );
+  }
+}
+
+class PaymentMethodsScreen extends StatefulWidget {
+  @override
+  _PaymentMethodsScreenState createState() => _PaymentMethodsScreenState();
+}
+
+class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
+  final List<String> _paymentMethods = [
+    'Credit Card',
+    'PayPal',
+    'Google Pay',
+    'Apple Pay',
+    'Bank Transfer',
+  ];
+
+  String? _selectedPaymentMethod;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Select a Payment Method:',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16),
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: _paymentMethods.length + 1, // +1 for the button
+            itemBuilder: (context, index) {
+              if (index < _paymentMethods.length) {
+                return RadioListTile<String>(
+                  title: Text(_paymentMethods[index]),
+                  value: _paymentMethods[index],
+                  groupValue: _selectedPaymentMethod,
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedPaymentMethod = value;
+                    });
+                  },
+                );
+              } else {
+                return Padding(
+                  padding: const EdgeInsets.only(top: 16.0),
+                  child: Center(
+                    child: ElevatedButton(
+                      onPressed: _selectedPaymentMethod == null
+                          ? null
+                          : () {
+                              // Logic to save the selected payment method can go here
+                              Navigator.pop(
+                                  context); // Navigate back to home screen
+                            },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                      ),
+                      child: const Text(
+                        'Save',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                );
+              }
+            },
+          ),
+        ],
       ),
     );
   }
