@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_cloudinary_file_upload/widgets/user_image_picker.dart';
-import 'package:flutter_cloudinary_file_upload/services/cloudinary_service.dart';
+import 'package:connectify/widgets/user_image_picker.dart';
+import 'package:connectify/services/cloudinary_service.dart';
 
 class UploadPhoto extends StatefulWidget {
   const UploadPhoto({super.key});

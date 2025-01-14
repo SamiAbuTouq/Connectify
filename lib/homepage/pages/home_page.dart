@@ -237,7 +237,10 @@ class _HomePageState extends State<HomePage> {
           ListTile(
             leading: const Icon(Icons.help, color: Colors.blue),
             title: const Text('Help & Support'),
-            onTap: () => Navigator.pop(context),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, "/helpSupportPage");
+            },
           ),
           const Divider(),
           ListTile(

@@ -85,11 +85,11 @@ class _ImLookingForState extends State<ImLookingForScreen> {
                 iconSize: 22,
                 foregroundColor: Colors.white,
                 backgroundColor: Colors.black,
-                side: const BorderSide(
-                    color: Color.fromARGB(255, 255, 255, 255), width: 2),
-                elevation: 20,
-                shadowColor:
-                    const Color.fromARGB(255, 0, 0, 0).withValues(alpha: 40),
+                // side: const BorderSide(
+                //     color: Color.fromARGB(255, 255, 255, 255), width: 2),
+                // elevation: 20,
+                // shadowColor:
+                //     const Color.fromARGB(255, 0, 0, 0).withValues(alpha: 40),
               ),
               onPressed: () {
                 if (select1) {

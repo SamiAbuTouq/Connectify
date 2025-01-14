@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_cloudinary_file_upload/services/auth_service.dart';
+import 'package:connectify/services/auth_service.dart';
 import '/widgets/logo.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';

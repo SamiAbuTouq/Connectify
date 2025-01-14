@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_cloudinary_file_upload/services/cloudinary_service.dart';
+import 'package:connectify/services/cloudinary_service.dart';
 
 class DbService {
   User? user = FirebaseAuth.instance.currentUser;

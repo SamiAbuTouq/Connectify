@@ -1,5 +1,5 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:flutter_cloudinary_file_upload/views/service.dart';
+import 'package:connectify/views/service.dart';
 // import 'package:day35/pages/cleaning.dart';
 import 'package:flutter/material.dart';
 

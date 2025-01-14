@@ -2,8 +2,8 @@ import 'routes.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_cloudinary_file_upload/firebase_options.dart';
-import 'package:flutter_cloudinary_file_upload/services/auth_service.dart';
+import 'package:connectify/firebase_options.dart';
+import 'package:connectify/services/auth_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

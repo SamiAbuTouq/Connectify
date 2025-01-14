@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'onboarding_page.dart';
 import 'transitions.dart';
-import 'package:flutter_cloudinary_file_upload/views/login.dart';
+import 'package:connectify/views/login.dart';
 
 class OnboardingScreens extends StatefulWidget {
   const OnboardingScreens({Key? key}) : super(key: key);

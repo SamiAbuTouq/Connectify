@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_cloudinary_file_upload/services/db_service.dart';
+import 'package:connectify/services/db_service.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import "package:http/http.dart" as http;
 import 'package:crypto/crypto.dart';
