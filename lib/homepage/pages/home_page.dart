@@ -47,12 +47,14 @@ class _HomePageState extends State<HomePage> {
             title: const Text(
               'Profile',
               style: TextStyle(
-                  fontFamily: "F1",
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white),
+                fontFamily: "F1",
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
             backgroundColor: Colors.blue,
             elevation: 0,
+            iconTheme: const IconThemeData(color: Colors.white),
           ),
           body: FadeInUp(
             child: SingleChildScrollView(
@@ -137,6 +139,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             backgroundColor: Colors.blue,
+            iconTheme: const IconThemeData(color: Colors.white),
           ),
           body: PaymentMethodsScreen(),
         ),
@@ -149,7 +152,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.blue.shade700,
+        backgroundColor: Colors.blue,
         elevation: 4,
         shadowColor: Colors.black54,
         leading: _showingSubServices
@@ -259,7 +262,7 @@ class _HomePageState extends State<HomePage> {
   Widget _buildBottomAppBar() {
     return BottomAppBar(
       height: 60,
-      color: Colors.blue.shade700,
+      color: Colors.blue,
       shape: const CircularNotchedRectangle(),
       notchMargin: 8.0,
       child: Row(
@@ -276,7 +279,7 @@ class _HomePageState extends State<HomePage> {
               decoration: isSelected
                   ? BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.white.withOpacity(0.2),
+                      color: Colors.white.withAlpha(60),
                     )
                   : null,
               child: Column(
@@ -287,7 +290,7 @@ class _HomePageState extends State<HomePage> {
                     color: isSelected
                         ? const Color.fromARGB(255, 255, 255, 255)
                         : const Color.fromARGB(255, 0, 0, 0),
-                    size: isSelected ? 28 : 24, // Larger size for selected icon
+                    size: isSelected ? 28 : 24,
                   ),
                   if (isSelected)
                     Container(
@@ -458,8 +461,8 @@ class _HomePageState extends State<HomePage> {
           itemCount: _services.length,
           itemBuilder: (context, index) {
             return FadeInUp(
-              delay: Duration(milliseconds: 200 * index),
-              duration: const Duration(milliseconds: 500),
+              delay: Duration(milliseconds: 100 * index),
+              duration: const Duration(milliseconds: 300),
               child: GestureDetector(
                 onTap: () => _handleServiceTap(_services[index]),
                 child: ServiceCard(service: _services[index]),

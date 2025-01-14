@@ -23,7 +23,11 @@ class ServiceCard extends StatelessWidget {
               color: Colors.white,
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Text("service.icon"),
+            child: SizedBox(
+              width: 50,
+              height: 50,
+              child: service.img,
+            ),
           ),
           const SizedBox(width: 15),
           Expanded(

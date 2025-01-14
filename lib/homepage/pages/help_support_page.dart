@@ -11,13 +11,15 @@ class HelpSupportPage extends StatelessWidget {
         title: const Text(
           'Help & Support',
           style: TextStyle(
-              color: Colors.black87,
-              fontWeight: FontWeight.bold,
-              fontFamily: "F1",
-              fontSize: 25),
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontFamily: "F1",
+            fontSize: 25,
+          ),
         ),
         backgroundColor: Colors.blue,
         elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: SafeArea(
         child: Padding(

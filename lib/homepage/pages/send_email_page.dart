@@ -20,13 +20,15 @@ class _SendEmailPageState extends State<SendEmailPage> {
         title: const Text(
           'Email Support',
           style: TextStyle(
-              color: Colors.black87,
-              fontWeight: FontWeight.bold,
-              fontFamily: "F1",
-              fontSize: 25),
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontFamily: "F1",
+            fontSize: 25,
+          ),
         ),
         backgroundColor: Colors.blue,
         elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: SafeArea(
         child: SingleChildScrollView(

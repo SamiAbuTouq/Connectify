@@ -56,12 +56,14 @@ How can I assist you today?''',
         title: const Text(
           "Chatbot",
           style: TextStyle(
+            color: Colors.white,
             fontWeight: FontWeight.bold,
             fontFamily: "F1",
             fontSize: 25,
           ),
         ),
         backgroundColor: Colors.blue,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       backgroundColor: Colors.white,
       body: Stack(
