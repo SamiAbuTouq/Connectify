@@ -3,7 +3,6 @@ import 'package:connectify/services/auth_service.dart';
 import '/widgets/logo.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import '../module/shared_data.dart';
 
 class SignupPage extends StatefulWidget {
@@ -43,15 +42,12 @@ class _SignupPageState extends State<SignupPage> {
       if (isSignedIn) {
         await googleSignIn.disconnect();
       }
-      // Trigger the authentication flow
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
       if (googleUser == null) {
-        // User canceled the sign-in process
         return Future.error('Sign-in canceled by user.');
       }
 
-      // Obtain the auth details from the request
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
 
@@ -59,23 +55,17 @@ class _SignupPageState extends State<SignupPage> {
         return Future.error('Google authentication failed.');
       }
 
-      // Create a new credential
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
-      // Sign in with Firebase
       final userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
-      // Save user info to Firestore
       final user = userCredential.user;
       if (user != null) {
-        await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
-          'username': user.displayName ?? 'Anonymous',
-          'email': user.email,
-          'image_url': user.photoURL,
-        }, SetOptions(merge: true));
+        sharedData['email'] = user.email ?? '';
+        sharedData['password'] = _passwordController.text;
       }
       Navigator.pushReplacementNamed(context, "/uploadPhoto");
 
