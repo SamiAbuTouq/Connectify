@@ -2,12 +2,13 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:connectify/services/db_service.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:connectify/services/db_service.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import "package:http/http.dart" as http;
 import 'package:crypto/crypto.dart';
 import 'package:permission_handler/permission_handler.dart'; // For accessing device directories
+import '../module/shared_data.dart';
 
 Future<bool> uploadToCloudinary(XFile? selectedFile) async {
   if (selectedFile == null) {
@@ -44,22 +45,25 @@ Future<bool> uploadToCloudinary(XFile? selectedFile) async {
       .transform(utf8.decoder) // Decode the bytes to string using utf8
       .join();
 
-  final user = FirebaseAuth.instance.currentUser!;
+  // final user = FirebaseAuth.instance.currentUser!;
 
   // Print the response
   if (response.statusCode == 200) {
     var jsonResponse = jsonDecode(responseBody);
-    Map<String, String> requiredData = {
-      'userId': user.uid,
-      'username': 'to be implemented...', //todo: implement username
-      "imageName": selectedFile.name,
-      "id": jsonResponse["public_id"],
-      "size": jsonResponse["bytes"].toString(),
-      "userImgUrl": jsonResponse["secure_url"],
-      "created_at": jsonResponse["created_at"],
-    };
+    // Map<String, String> requiredData = {
+    //   'userId': user.uid,
+    //   'username': 'to be implemented...', //todo: implement username
+    //   "imageName": selectedFile.name,
+    //   "id": jsonResponse["public_id"],
+    //   "size": jsonResponse["bytes"].toString(),
+    //   "userImgUrl": jsonResponse["secure_url"],
+    //   "created_at": jsonResponse["created_at"],
+    // };
 
-    await DbService().saveUploadedFilesData(requiredData);
+    // await DbService().saveUploadedFilesData(requiredData);
+    sharedData['imageUrl'] = jsonResponse["secure_url"];
+    print(sharedData);
+
     print("Upload successful!");
     return true;
   } else {
@@ -105,22 +109,25 @@ Future<bool> uploadToCloudinary1(File? selectedFile) async {
       .transform(utf8.decoder) // Decode the bytes to string using utf8
       .join();
 
-  final user = FirebaseAuth.instance.currentUser!;
+  // final user = FirebaseAuth.instance.currentUser!;
 
   // Print the response
   if (response.statusCode == 200) {
     var jsonResponse = jsonDecode(responseBody);
-    Map<String, String> requiredData = {
-      'userId': user.uid,
-      'username': 'to be implemented...', //todo: implement username
-      "imageName": selectedFile.path.split('/').last,
-      "id": jsonResponse["public_id"],
-      "size": jsonResponse["bytes"].toString(),
-      "userImgUrl": jsonResponse["secure_url"],
-      "created_at": jsonResponse["created_at"],
-    };
+    // Map<String, String> requiredData = {
+    //   'userId': user.uid,
+    //   'username': 'to be implemented...', //todo: implement username
+    //   "imageName": selectedFile.path.split('/').last,
+    //   "id": jsonResponse["public_id"],
+    //   "size": jsonResponse["bytes"].toString(),
+    //   "userImgUrl": jsonResponse["secure_url"],
+    //   "created_at": jsonResponse["created_at"],
+    // };
 
-    await DbService().saveUploadedFilesData(requiredData);
+    // await DbService().saveUploadedFilesData(requiredData);
+    sharedData['imageUrl'] = jsonResponse["secure_url"];
+    print(sharedData);
+
     print("Upload successful!");
     return true;
   } else {

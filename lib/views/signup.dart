@@ -4,6 +4,7 @@ import '/widgets/logo.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../module/shared_data.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -19,7 +20,7 @@ var buttonStyle = ElevatedButton.styleFrom(
   iconColor: Colors.white,
   iconSize: 24,
   foregroundColor: Colors.white,
-  backgroundColor: Colors.black,
+  backgroundColor: Colors.blue,
   // side: const BorderSide(color: Color.fromARGB(255, 255, 255, 255), width: 2),
   // elevation: 20,
   // shadowColor: const Color.fromARGB(255, 0, 0, 0).withAlpha(40),
@@ -215,6 +216,13 @@ class _SignupPageState extends State<SignupPage> {
                                     .then(
                                   (value) {
                                     if (value == "Account Created") {
+                                      final user =
+                                          FirebaseAuth.instance.currentUser;
+                                      if (user != null) {
+                                        sharedData['email'] = user.email ?? '';
+                                        sharedData['password'] =
+                                            _passwordController.text;
+                                      }
                                       Navigator.pushNamedAndRemoveUntil(context,
                                           "/uploadPhoto", (route) => false);
                                     } else {

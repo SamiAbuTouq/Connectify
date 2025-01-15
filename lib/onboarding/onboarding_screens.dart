@@ -142,7 +142,8 @@ class _OnboardingScreenState extends State<OnboardingScreens>
                           child: TextButton(
                             onPressed: _previousPage,
                             style: TextButton.styleFrom(
-                              foregroundColor: Theme.of(context).primaryColor,
+                              foregroundColor: Colors.blue,
+                              backgroundColor: Colors.white,
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 24),
                             ),
@@ -176,6 +177,8 @@ class _OnboardingScreenState extends State<OnboardingScreens>
                                 }
                               : _nextPage,
                           style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                            foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(
                               horizontal: 32,
                               vertical: 12,

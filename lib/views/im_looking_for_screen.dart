@@ -1,6 +1,6 @@
-import '/widgets/logo.dart';
 import 'package:flutter/material.dart';
 import '/widgets/select_container_widget.dart';
+import '../module/shared_data.dart';
 
 class ImLookingForScreen extends StatefulWidget {
   const ImLookingForScreen({super.key});
@@ -18,10 +18,18 @@ class _ImLookingForState extends State<ImLookingForScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 24),
-          child: Logo(),
+        title: const Text(
+          'Connectify',
+          style: TextStyle(
+            fontFamily: "F1",
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            fontSize: 30,
+          ),
         ),
+        backgroundColor: Colors.blue,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -84,24 +92,23 @@ class _ImLookingForState extends State<ImLookingForScreen> {
                 iconColor: Colors.white,
                 iconSize: 22,
                 foregroundColor: Colors.white,
-                backgroundColor: Colors.black,
-                // side: const BorderSide(
-                //     color: Color.fromARGB(255, 255, 255, 255), width: 2),
-                // elevation: 20,
-                // shadowColor:
-                //     const Color.fromARGB(255, 0, 0, 0).withValues(alpha: 40),
+                backgroundColor: Colors.blue,
               ),
               onPressed: () {
                 if (select1) {
+                  sharedData['provider'] = 'true';
+
                   Navigator.pushNamed(context, "/experiance");
                 } else if (select2) {
+                  sharedData['provider'] = 'false';
+                  storeUserInfo();
+
                   Navigator.pushNamedAndRemoveUntil(
                     context,
                     "/homePage",
                     (route) => false,
                   );
                 } else {
-                  // Show an alert if no option is selected
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Please select an option first.'),

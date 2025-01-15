@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:connectify/widgets/user_image_picker.dart';
 import 'package:connectify/services/cloudinary_service.dart';
+import '../module/shared_data.dart';
 
 class UploadPhoto extends StatefulWidget {
   const UploadPhoto({super.key});
@@ -22,10 +23,7 @@ var _buttonStyle = ElevatedButton.styleFrom(
   iconColor: Colors.white,
   iconSize: 24,
   foregroundColor: Colors.white,
-  backgroundColor: Colors.black,
-  // side: const BorderSide(color: Color.fromARGB(255, 255, 255, 255), width: 2),
-  // elevation: 20,
-  // shadowColor: const Color.fromARGB(255, 0, 0, 0).withValues(alpha: 40),
+  backgroundColor: Colors.blue,
 );
 
 class _UploadPhotoState extends State<UploadPhoto> {
@@ -34,21 +32,18 @@ class _UploadPhotoState extends State<UploadPhoto> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Image.asset(
-          'assets/images/logo/small-logo.png',
-          width: 250,
+        title: const Text(
+          'Connectify',
+          style: TextStyle(
+            fontFamily: "F1",
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            fontSize: 30,
+          ),
         ),
-        //  Text("Connectify")
-        // actions: [
-        //   IconButton(
-        //     onPressed: () async {
-        //       await AuthService().logout();
-        //       Navigator.pushReplacementNamed(context, "/login");
-        //     },
-        //     icon: Icon(Icons.logout),
-        //   ),
-        // ],
+        backgroundColor: Colors.blue,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -65,7 +60,7 @@ class _UploadPhotoState extends State<UploadPhoto> {
               height: 10,
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(40, 10, 40, 10),
+              padding: const EdgeInsets.fromLTRB(40, 10, 40, 10),
               child: Column(
                 children: [
                   Form(
@@ -110,6 +105,8 @@ class _UploadPhotoState extends State<UploadPhoto> {
                               await uploadToCloudinary1(_selectedImage);
 
                           if (result) {
+                            sharedData['username'] = _usernameController.text;
+
                             Navigator.pushNamed(context, "/imLookingFor");
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(

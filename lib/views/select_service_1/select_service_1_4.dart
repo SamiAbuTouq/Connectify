@@ -1,6 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:connectify/views/service.dart';
-// import 'package:day35/pages/cleaning.dart';
+import 'package:connectify/module/shared_data.dart';
 import 'package:flutter/material.dart';
 
 class SelectService14 extends StatefulWidget {
@@ -32,6 +32,9 @@ class _SelectServiceState extends State<SelectService14> {
       floatingActionButton: selectedServices.isNotEmpty
           ? FloatingActionButton(
               onPressed: () {
+                sharedData['subServices'] = selectedServices
+                    .map((index) => services[index].name)
+                    .toList();
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
@@ -64,6 +67,7 @@ class _SelectServiceState extends State<SelectService14> {
                           const SizedBox(height: 20),
                           ElevatedButton(
                             onPressed: () {
+                              storeUserInfo();
                               Navigator.pushNamedAndRemoveUntil(
                                 context,
                                 "/homePage",

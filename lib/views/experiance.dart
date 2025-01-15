@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import '../module/shared_data.dart';
 
 class Experiance extends StatefulWidget {
   const Experiance({super.key});
 
   @override
-  State<Experiance> createState() => _HomePageState();
+  State<Experiance> createState() => _ExperianceState();
 }
 
-class _HomePageState extends State<Experiance> {
+class _ExperianceState extends State<Experiance> {
   final _formKey = GlobalKey<FormState>();
   String? _selectedDuration;
   final TextEditingController _optionalInfoController = TextEditingController();
@@ -17,10 +18,18 @@ class _HomePageState extends State<Experiance> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Image.asset(
-          'assets/images/logo/small-logo.png',
-          width: 250,
+        title: const Text(
+          'Connectify',
+          style: TextStyle(
+            fontFamily: "F1",
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            fontSize: 30,
+          ),
         ),
+        backgroundColor: Colors.blue,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(25, 40, 25, 0),
@@ -35,6 +44,7 @@ class _HomePageState extends State<Experiance> {
               ),
               const SizedBox(height: 7),
               DropdownButtonFormField<String>(
+                dropdownColor: Colors.white,
                 value: _selectedDuration,
                 hint: const Text("Select years of experience"),
                 decoration: const InputDecoration(
@@ -97,15 +107,12 @@ class _HomePageState extends State<Experiance> {
                     iconColor: Colors.white,
                     iconSize: 22,
                     foregroundColor: Colors.white,
-                    backgroundColor: Colors.black,
-                    // side: const BorderSide(
-                    //     color: Color.fromARGB(255, 255, 255, 255), width: 2),
-                    // elevation: 20,
-                    // shadowColor: const Color.fromARGB(255, 0, 0, 0)
-                    //     .withValues(alpha: 40),
+                    backgroundColor: Colors.blue,
                   ),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
+                      sharedData['experiance'] = _selectedDuration;
+                      sharedData['otherInfo'] = _optionalInfoController.text;
                       Navigator.pushNamed(context, "/selectService");
                     }
                   },

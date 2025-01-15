@@ -1,7 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'service.dart';
-// import 'package:day35/pages/cleaning.dart';
 import 'package:flutter/material.dart';
+import '../module/shared_data.dart';
 
 class SelectService extends StatefulWidget {
   const SelectService({super.key});
@@ -101,15 +101,15 @@ class _SelectServiceState extends State<SelectService> {
   serviceContainer(String image, String name, int index) {
     return GestureDetector(
       onTap: () {
-        setState(
-          () {
-            if (selectedService == index) {
-              selectedService = -1;
-            } else {
-              selectedService = index;
-            }
-          },
-        );
+        setState(() {
+          if (selectedService == index) {
+            selectedService = -1;
+            sharedData.remove('mainService');
+          } else {
+            selectedService = index;
+            sharedData['mainService'] = name;
+          }
+        });
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
