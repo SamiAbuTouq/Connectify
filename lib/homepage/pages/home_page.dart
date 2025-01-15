@@ -19,6 +19,7 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   bool _showingSubServices = false;
   String _selectedService = '';
+  Set<String> _selectedSubServices = {};
 
   final UserProfile _userProfile = UserProfile.sampleProfile;
   final List<Service> _services = Service.sampleServices;
@@ -27,6 +28,8 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _showingSubServices = true;
       _selectedService = service.name;
+      _selectedSubServices
+          .clear(); // Reset selected sub-service when changing service
     });
   }
 
@@ -34,6 +37,17 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _showingSubServices = false;
       _selectedService = '';
+      _selectedSubServices.clear();
+    });
+  }
+
+  void _handleSubServiceSelection(String subService) {
+    setState(() {
+      if (_selectedSubServices.contains(subService)) {
+        _selectedSubServices.remove(subService);
+      } else {
+        _selectedSubServices.add(subService);
+      }
     });
   }
 
@@ -141,7 +155,7 @@ class _HomePageState extends State<HomePage> {
             backgroundColor: Colors.blue,
             iconTheme: const IconThemeData(color: Colors.white),
           ),
-          body: PaymentMethodsScreen(),
+          body: const PaymentMethodsScreen(),
         ),
       ),
     );
@@ -161,11 +175,11 @@ class _HomePageState extends State<HomePage> {
                 onPressed: _handleBack,
               )
             : null,
-        title: Text(
-          _showingSubServices ? _selectedService : 'Connectify',
-          style: const TextStyle(
+        title: const Text(
+          'Connectify',
+          style: TextStyle(
             fontFamily: 'F1',
-            color: Colors.white,
+            color: Color.fromARGB(255, 255, 255, 255),
             fontSize: 26,
             fontWeight: FontWeight.bold,
           ),
@@ -174,8 +188,21 @@ class _HomePageState extends State<HomePage> {
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       drawer: !_showingSubServices ? _buildDrawer() : null,
-      body: _buildMainContent(),
+      body: _showingSubServices
+          ? _buildSubServicesContent()
+          : _buildMainContent(),
       bottomNavigationBar: !_showingSubServices ? _buildBottomAppBar() : null,
+      floatingActionButton:
+          _showingSubServices && _selectedSubServices.isNotEmpty
+              ? FloatingActionButton(
+                  backgroundColor: Colors.blue,
+                  onPressed: _showBookingDialog,
+                  child: const Icon(
+                    Icons.done,
+                    color: Colors.white,
+                  ),
+                )
+              : null,
     );
   }
 
@@ -336,15 +363,19 @@ class _HomePageState extends State<HomePage> {
         return _buildHomeContent();
       case 1:
         return FadeInUp(
-            child: const Center(child: Text('your bookings will appear here')));
+            child: const Center(
+                child:
+                    Text('your bookings will appear here\n Comming Soon...')));
       case 2:
         return FadeInUp(
-            child:
-                const Center(child: Text('here you can see your bookmarks')));
+            child: const Center(
+                child:
+                    Text('here you can see your bookmarks\n Comming Soon...')));
       case 3:
         return FadeInUp(
             child: const Center(
-                child: Text('here you can see all service providers')));
+                child: Text(
+                    'here you can see all service providers\n Comming Soon...')));
       default:
         return _buildHomeContent();
     }
@@ -354,7 +385,7 @@ class _HomePageState extends State<HomePage> {
     final selectedServiceData =
         _services.firstWhere((service) => service.name == _selectedService);
     final subServices = selectedServiceData.subServices;
-
+    final subServicesImg = selectedServiceData.subServicesImg;
     return FadeInUp(
       child: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -362,7 +393,7 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Select a service:',
+              'Select services:',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -372,25 +403,42 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 20),
             Expanded(
               child: ListView.builder(
-                itemCount: subServices.length,
+                itemCount: subServices.length < subServicesImg.length
+                    ? subServices.length
+                    : subServicesImg.length,
+                shrinkWrap: true,
+                physics: const AlwaysScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
+                  if (index >= subServices.length ||
+                      index >= subServicesImg.length) {
+                    return const SizedBox();
+                  }
                   return FadeInUp(
                     delay: Duration(milliseconds: 100 * index),
                     child: Card(
+                      color: _selectedSubServices.contains(subServices[index])
+                          ? Colors.blue.shade100
+                          : const Color.fromARGB(255, 240, 240, 240),
                       elevation: 2,
                       margin: const EdgeInsets.only(bottom: 12),
                       child: ListTile(
-                        leading: selectedServiceData.img,
+                        leading: Image.network(
+                          subServicesImg[index],
+                          width: 50,
+                        ),
                         title: Text(
                           subServices[index],
                           style: const TextStyle(
-                            fontSize: 16,
+                            fontSize: 15,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                        trailing: _selectedSubServices
+                                .contains(subServices[index])
+                            ? const Icon(Icons.check_circle, color: Colors.blue)
+                            : null,
                         onTap: () {
-                          // Handle sub-service selection
+                          _handleSubServiceSelection(subServices[index]);
                         },
                       ),
                     ),
@@ -401,6 +449,61 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+    );
+  }
+
+  void _showBookingDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          title: const Text('Confirm Booking'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('You are about to book the following services:'),
+              const SizedBox(height: 10),
+              ...(_selectedSubServices.map((service) => Text('• $service'))),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text(
+                'Cancel',
+                style: TextStyle(color: Color.fromARGB(255, 127, 191, 244)),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text(
+                'Confirm',
+                style: TextStyle(color: Colors.blue),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      'Booking confirmed!',
+                    ),
+                    duration: Duration(seconds: 2),
+                  ),
+                );
+                setState(() {
+                  _showingSubServices = false;
+                  _selectedService = '';
+                  _selectedSubServices.clear();
+                });
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -416,7 +519,7 @@ class _HomePageState extends State<HomePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(
-                      height: 25,
+                      height: 5,
                     ),
                     Text(
                       'Hello, ${_userProfile.name.split(' ')[0]}',
@@ -434,7 +537,6 @@ class _HomePageState extends State<HomePage> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 5),
                     // TextField(
                     //   decoration: InputDecoration(
                     //     hintText: 'Search services',
@@ -476,8 +578,11 @@ class _HomePageState extends State<HomePage> {
 }
 
 class PaymentMethodsScreen extends StatefulWidget {
+  const PaymentMethodsScreen({super.key});
   @override
-  _PaymentMethodsScreenState createState() => _PaymentMethodsScreenState();
+  State<StatefulWidget> createState() {
+    return _PaymentMethodsScreenState();
+  }
 }
 
 class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {

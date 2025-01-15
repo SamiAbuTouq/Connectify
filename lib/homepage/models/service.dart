@@ -5,12 +5,14 @@ class Service {
   final Image img;
   final String description;
   final List<String> subServices;
+  final List<String> subServicesImg;
 
   Service({
     required this.name,
     required this.img,
     required this.description,
     required this.subServices,
+    required this.subServicesImg,
   });
 
   static List<Service> sampleServices = [
@@ -20,10 +22,22 @@ class Service {
           'https://img.icons8.com/3d-fluency/94/home-automation.png'),
       description: 'Plumbing Repair & Installation',
       subServices: [
-        'Pipe Repair',
-        'Water Heater Installation',
-        'Drain Cleaning',
-        'Faucet Repair'
+        'Electrician',
+        'Carpenter',
+        'Painting',
+        'Plumber',
+        'HVAC',
+        'Pest Control',
+        'Gardening',
+      ],
+      subServicesImg: [
+        'https://img.icons8.com/external-soft-fill-juicy-fish/60/external-electrician-key-workers-soft-fill-soft-fill-juicy-fish.png',
+        'https://img.icons8.com/3d-fluency/94/saw.png',
+        'https://img.icons8.com/3d-fluency/94/roller-brush.png',
+        'https://img.icons8.com/?size=100&id=xFN45rDF7HLr&format=png&color=000000',
+        'https://img.icons8.com/fluency/48/heat-and-cool.png',
+        'https://img.icons8.com/color/48/no-fly.png',
+        'https://img.icons8.com/3d-fluency/94/garden.png',
       ],
     ),
     Service(
@@ -32,12 +46,16 @@ class Service {
           Image.network('https://img.icons8.com/3d-fluency/94/maintenance.png'),
       description: 'Electrical Repair & Installation',
       subServices: [
-        'Fix Air Conditioner',
-        'Fix Air Fryer',
-        'Fix Refrigerator',
-        'Fix Lighting',
-        'Fix Power Outlets',
-        'Wiring Installation'
+        'Refrigerator Repair',
+        'Washing Machine ',
+        'Microwave & Oven Repair',
+        'Television Repair',
+      ],
+      subServicesImg: [
+        'https://img.icons8.com/3d-fluency/94/fridge.png',
+        'https://img.icons8.com/3d-fluency/94/hdtv.png',
+        'https://img.icons8.com/3d-fluency/94/washing-machine.png',
+        'https://img.icons8.com/3d-fluency/94/cooker--v3.png',
       ],
     ),
     Service(
@@ -46,10 +64,14 @@ class Service {
           Image.network('https://img.icons8.com/3d-fluency/94/workstation.png'),
       description: 'Landscaping & Garden Maintenance',
       subServices: [
-        'Lawn Mowing',
-        'Plant Installation',
-        'Tree Trimming',
-        'Garden Design'
+        ' Network Setup',
+        'Smart Home Installation',
+        'Computer Repairs',
+      ],
+      subServicesImg: [
+        'https://img.icons8.com/3d-fluency/94/wi-fi-connected.png',
+        'https://img.icons8.com/3d-fluency/94/smart-home.png',
+        'https://img.icons8.com/3d-fluency/94/smartphone-tablet.png',
       ],
     ),
     Service(
@@ -57,10 +79,16 @@ class Service {
       img: Image.network('https://img.icons8.com/3d-fluency/94/welfare.png'),
       description: 'Landscaping & Garden Maintenance',
       subServices: [
-        'Lawn Mowing',
-        'Plant Installation',
-        'Tree Trimming',
-        'Garden Design'
+        'Salon at Home',
+        'Massage at Home',
+        'Pet Care',
+        'Tailoring & Alterations',
+      ],
+      subServicesImg: [
+        'https://img.icons8.com/3d-fluency/94/barbershop.png',
+        'https://img.icons8.com/emoji/96/person-getting-massage.png',
+        'https://img.icons8.com/fluency/96/cat-caregivers.png',
+        'https://img.icons8.com/fluency/96/sewing-machine.png',
       ],
     ),
     Service(
@@ -68,10 +96,27 @@ class Service {
       img: Image.network('https://img.icons8.com/3d-fluency/94/reading.png'),
       description: 'Landscaping & Garden Maintenance',
       subServices: [
-        'Lawn Mowing',
-        'Plant Installation',
-        'Tree Trimming',
-        'Garden Design'
+        'Mathematics',
+        'Physics',
+        'Chemistry',
+        'Biology',
+        'Languages',
+        'History',
+        'Computer Science',
+        'Art & Design',
+        'Drawing & Sketching',
+        'Music & Performance',
+      ],
+      subServicesImg: [
+        'https://img.icons8.com/3d-fluency/94/math.png',
+        'https://img.icons8.com/3d-fluency/94/physics.png',
+        'https://img.icons8.com/3d-fluency/94/molecule.png',
+        'https://img.icons8.com/3d-fluency/94/biotech.png',
+        'https://img.icons8.com/3d-fluency/94/language.png',
+        'https://img.icons8.com/3d-fluency/94/scroll.png',
+        'https://img.icons8.com/3d-fluency/94/science-fiction.png',
+        'https://img.icons8.com/3d-fluency/94/easel.png',
+        'https://img.icons8.com/fluency/94/grand-piano.png',
       ],
     ),
     Service(
@@ -79,10 +124,16 @@ class Service {
       img: Image.network('https://img.icons8.com/3d-fluency/94/confetti.png'),
       description: 'Landscaping & Garden Maintenance',
       subServices: [
-        'Lawn Mowing',
-        'Plant Installation',
-        'Tree Trimming',
-        'Garden Design'
+        ' Security Services',
+        'Photography & Videography',
+        'Catering Services',
+        'Decoration Services',
+      ],
+      subServicesImg: [
+        'https://img.icons8.com/fluency/48/soldier.png',
+        'https://img.icons8.com/3d-fluency/94/camera.png',
+        'https://img.icons8.com/3d-fluency/94/tableware.png',
+        'https://img.icons8.com/3d-fluency/94/party-baloons.png',
       ],
     ),
     Service(
@@ -90,11 +141,9 @@ class Service {
       img: Image.network(
           'https://img.icons8.com/external-vitaliy-gorbachev-flat-vitaly-gorbachev/2x/external-cleaning-labour-day-vitaliy-gorbachev-flat-vitaly-gorbachev.png'),
       description: 'Landscaping & Garden Maintenance',
-      subServices: [
-        'Lawn Mowing',
-        'Plant Installation',
-        'Tree Trimming',
-        'Garden Design'
+      subServices: ['General Cleaning'],
+      subServicesImg: [
+        'https://img.icons8.com/external-vitaliy-gorbachev-flat-vitaly-gorbachev/2x/external-cleaning-labour-day-vitaliy-gorbachev-flat-vitaly-gorbachev.png'
       ],
     ),
   ];
