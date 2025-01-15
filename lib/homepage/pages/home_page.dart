@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import '../models/service.dart';
-import '../models/user_profile.dart';
 import '../widgets/service_card.dart';
-import '../widgets/profile_section.dart';
 import '../widgets/dialogs.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:connectify/module/shared_data.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,18 +19,45 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   bool _showingSubServices = false;
   String _selectedService = '';
-  Set<String> _selectedSubServices = {};
+  final Set<String> _selectedSubServices = {};
 
-  final UserProfile _userProfile = UserProfile.sampleProfile;
   final List<Service> _services = Service.sampleServices;
+  Map<String, dynamic>? userProfile;
+  bool isLoading = true;
+  String errorMessage = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
 
   void _handleServiceTap(Service service) {
     setState(() {
       _showingSubServices = true;
       _selectedService = service.name;
-      _selectedSubServices
-          .clear(); // Reset selected sub-service when changing service
+      _selectedSubServices.clear();
     });
+  }
+
+  Future<void> _loadUserData() async {
+    try {
+      final userId = FirebaseAuth.instance.currentUser?.uid ?? '';
+      print('User ID: $userId');
+      if (userId.isEmpty) throw Exception('User not logged in.');
+      final userData = await fetchUserData(userId);
+      print('Fetched user data: $userData');
+      setState(() {
+        userProfile = userData;
+        isLoading = false;
+      });
+    } catch (e) {
+      print('Error loading user data: $e');
+      setState(() {
+        errorMessage = e.toString();
+        isLoading = false;
+      });
+    }
   }
 
   void _handleBack() {
@@ -49,92 +76,6 @@ class _HomePageState extends State<HomePage> {
         _selectedSubServices.add(subService);
       }
     });
-  }
-
-  void _navigateToProfile(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => Scaffold(
-          backgroundColor: Colors.white,
-          appBar: AppBar(
-            title: const Text(
-              'Profile',
-              style: TextStyle(
-                fontFamily: "F1",
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            backgroundColor: Colors.blue,
-            elevation: 0,
-            iconTheme: const IconThemeData(color: Colors.white),
-          ),
-          body: FadeInUp(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: Column(
-                      children: [
-                        const CircleAvatar(
-                          radius: 50,
-                          backgroundColor: Colors.blue,
-                          child:
-                              Icon(Icons.person, color: Colors.white, size: 50),
-                        ),
-                        const SizedBox(height: 20),
-                        Text(
-                          _userProfile.name,
-                          style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          'Member since ${_userProfile.memberSince}',
-                          style: const TextStyle(color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                  ProfileSection(
-                      title: 'Email',
-                      value: _userProfile.email,
-                      icon: Icons.email),
-                  ProfileSection(
-                      title: 'Phone',
-                      value: _userProfile.phone,
-                      icon: Icons.phone),
-                  ProfileSection(
-                      title: 'Address',
-                      value: _userProfile.address,
-                      icon: Icons.location_on),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Handle edit profile
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      minimumSize: const Size(double.infinity, 50),
-                    ),
-                    child: const Text(
-                      'Edit Profile',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
   }
 
   void _navigateToPaymentMethod() {
@@ -221,18 +162,21 @@ class _HomePageState extends State<HomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 30,
                   backgroundColor: Colors.white,
-                  child: Icon(Icons.person, color: Colors.blue, size: 40),
+                  backgroundImage: NetworkImage(userProfile?['imageUrl'] ?? ''),
+                  child: userProfile?['imageUrl']?.isNotEmpty == true
+                      ? null
+                      : Icon(Icons.person, color: Colors.blue, size: 40),
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  _userProfile.name,
+                  userProfile?['username'] ?? "",
                   style: const TextStyle(color: Colors.white, fontSize: 18),
                 ),
                 Text(
-                  _userProfile.email,
+                  userProfile?['email'] ?? "",
                   style: const TextStyle(color: Colors.white70, fontSize: 14),
                 ),
               ],
@@ -248,7 +192,7 @@ class _HomePageState extends State<HomePage> {
             title: const Text('Profile'),
             onTap: () {
               Navigator.pop(context);
-              _navigateToProfile(context);
+              Navigator.pushNamed(context, '/profilePage');
             },
           ),
           ListTile(
@@ -522,7 +466,7 @@ class _HomePageState extends State<HomePage> {
                       height: 5,
                     ),
                     Text(
-                      'Hello, ${_userProfile.name.split(' ')[0]}',
+                      'Hello, ${userProfile?['username'] ?? "".split(' ')[0]}',
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.grey.shade600,

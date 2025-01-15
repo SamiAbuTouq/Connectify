@@ -111,7 +111,7 @@ class _ExperianceState extends State<Experiance> {
                   ),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      sharedData['experiance'] = _selectedDuration;
+                      sharedData['experience'] = _selectedDuration;
                       sharedData['otherInfo'] = _optionalInfoController.text;
                       Navigator.pushNamed(context, "/selectService");
                     }

@@ -2,7 +2,7 @@ import 'onboarding/splash.dart';
 import '/views/login.dart';
 import '/views/signup.dart';
 import 'views/upload_img.dart';
-import 'views/experiance.dart';
+import 'views/experience.dart';
 import '/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'views/select_service_page.dart';
@@ -19,6 +19,7 @@ import 'views/select_service_1/select_service_1_4.dart';
 import 'views/select_service_1/select_service_1_5.dart';
 import 'views/select_service_1/select_service_1_6.dart';
 import 'package:connectify/homepage/pages/send_email_page.dart';
+import 'package:connectify/homepage/pages/profile_page.dart';
 
 final Map<String, WidgetBuilder> appRoutes = {
   "/": (context) => const CheckUser(),
@@ -41,6 +42,7 @@ final Map<String, WidgetBuilder> appRoutes = {
   "/helpSupportPage": (context) => const HelpSupportPage(),
   "/chatbot": (context) => const ChatbotPage(),
   "/sendEmail": (context) => const SendEmailPage(),
+  "/profilePage": (context) => const ProfilePage(),
 };
 
 class CheckUser extends StatefulWidget {
