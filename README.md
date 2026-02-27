@@ -1,6 +1,6 @@
 # Connectify
 
-A cross-platform Flutter application that connects users with local service providers. Browse, select, and book services such as cleaning, maintenance, and more -- all from one app.
+A cross-platform Flutter application that connects users with local service providers. Browse, select, and book services such as cleaning, maintenance, and more all from one app.
 
 ## Features
 
