@@ -206,7 +206,10 @@ class _HomePageState extends State<HomePage> {
           ListTile(
             leading: const Icon(Icons.settings, color: Colors.blue),
             title: const Text('Settings'),
-            onTap: () => Navigator.pop(context),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/settings');
+            },
           ),
           ListTile(
             leading: const Icon(Icons.help, color: Colors.blue),
@@ -427,9 +430,15 @@ class _HomePageState extends State<HomePage> {
                 'Confirm',
                 style: TextStyle(color: Colors.blue),
               ),
-              onPressed: () {
+              onPressed: () async {
                 Navigator.of(context).pop();
 
+                await saveBooking(
+                  serviceName: _selectedService,
+                  subServices: _selectedSubServices.toList(),
+                );
+
+                if (!mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text(

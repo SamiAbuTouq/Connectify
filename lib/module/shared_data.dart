@@ -35,6 +35,27 @@ Future<Map<String, dynamic>> fetchUserData(String userId) async {
   }
 }
 
+// Saves a booking to the bookings collection in Firestore
+Future<void> saveBooking({
+  required String serviceName,
+  required List<String> subServices,
+}) async {
+  try {
+    final currentUserId = FirebaseAuth.instance.currentUser?.uid ?? '';
+    if (currentUserId.isEmpty) return;
+
+    await FirebaseFirestore.instance.collection('bookings').add({
+      'userId': currentUserId,
+      'serviceName': serviceName,
+      'subServices': subServices,
+      'status': 'Pending',
+      'createdAt': FieldValue.serverTimestamp(),
+    });
+  } catch (e) {
+    print("Error saving booking: $e");
+  }
+}
+
 // Fetches services data from Firestore
 Future<List<Map<String, dynamic>>> fetchServicesData() async {
   try {

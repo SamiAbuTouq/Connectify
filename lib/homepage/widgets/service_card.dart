@@ -3,8 +3,15 @@ import '../models/service.dart';
 
 class ServiceCard extends StatelessWidget {
   final Service service;
+  final bool isBookmarked;
+  final VoidCallback? onBookmarkToggle;
 
-  const ServiceCard({super.key, required this.service});
+  const ServiceCard({
+    super.key,
+    required this.service,
+    this.isBookmarked = false,
+    this.onBookmarkToggle,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +60,18 @@ class ServiceCard extends StatelessWidget {
               ],
             ),
           ),
+          if (onBookmarkToggle != null)
+            GestureDetector(
+              onTap: onBookmarkToggle,
+              child: Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: Icon(
+                  isBookmarked ? Icons.bookmark : Icons.bookmark_outline,
+                  color: isBookmarked ? Colors.blue : Colors.grey.shade500,
+                  size: 24,
+                ),
+              ),
+            ),
           Icon(
             Icons.arrow_forward_ios,
             color: Colors.grey.shade800,
