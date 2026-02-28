@@ -140,10 +140,22 @@ class Service {
       name: 'Cleaning',
       img: Image.network(
           'https://img.icons8.com/external-vitaliy-gorbachev-flat-vitaly-gorbachev/2x/external-cleaning-labour-day-vitaliy-gorbachev-flat-vitaly-gorbachev.png'),
-      description: 'Landscaping & Garden Maintenance',
-      subServices: ['General Cleaning'],
+      description: 'Home & Office Cleaning Services',
+      subServices: [
+        'General Cleaning',
+        'Deep Cleaning',
+        'Kitchen Cleaning',
+        'Bathroom Cleaning',
+        'Window Cleaning',
+        'Carpet Cleaning',
+      ],
       subServicesImg: [
-        'https://img.icons8.com/external-vitaliy-gorbachev-flat-vitaly-gorbachev/2x/external-cleaning-labour-day-vitaliy-gorbachev-flat-vitaly-gorbachev.png'
+        'https://img.icons8.com/3d-fluency/94/broom.png',
+        'https://img.icons8.com/3d-fluency/94/washing-machine.png',
+        'https://img.icons8.com/3d-fluency/94/cooker--v3.png',
+        'https://img.icons8.com/3d-fluency/94/shower.png',
+        'https://img.icons8.com/3d-fluency/94/window.png',
+        'https://img.icons8.com/3d-fluency/94/vacuum-cleaner.png',
       ],
     ),
   ];

@@ -216,10 +216,27 @@ class _LoginPageState extends State<LoginPage> {
                                 Image.asset(
                                   "assets/images/logo/google.png",
                                   width: 27,
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, "/forgotPassword");
+                            },
+                            child: Text(
+                              "Forgot Password?",
+                              style: TextStyle(
+                                color: Colors.blue.shade400,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
                                 const Text(
                                   "Sign in with Google",
                                   style: TextStyle(fontSize: 16),
