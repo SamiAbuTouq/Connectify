@@ -20,6 +20,8 @@ import 'views/select_service_1/select_service_1_5.dart';
 import 'views/select_service_1/select_service_1_6.dart';
 import 'package:connectify/homepage/pages/send_email_page.dart';
 import 'package:connectify/homepage/pages/profile_page.dart';
+import 'package:connectify/homepage/pages/settings_page.dart';
+import 'package:connectify/views/forgot_password.dart';
 
 final Map<String, WidgetBuilder> appRoutes = {
   "/": (context) => const CheckUser(),
@@ -43,6 +45,8 @@ final Map<String, WidgetBuilder> appRoutes = {
   "/chatbot": (context) => const ChatbotPage(),
   "/sendEmail": (context) => const SendEmailPage(),
   "/profilePage": (context) => const ProfilePage(),
+  "/settings": (context) => const SettingsPage(),
+  "/forgotPassword": (context) => const ForgotPasswordPage(),
 };
 
 class CheckUser extends StatefulWidget {

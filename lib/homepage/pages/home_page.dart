@@ -4,7 +4,11 @@ import '../models/service.dart';
 import '../widgets/service_card.dart';
 import '../widgets/dialogs.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectify/module/shared_data.dart';
+import 'bookings_page.dart';
+import 'bookmarks_page.dart';
+import 'providers_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -206,7 +210,10 @@ class _HomePageState extends State<HomePage> {
           ListTile(
             leading: const Icon(Icons.settings, color: Colors.blue),
             title: const Text('Settings'),
-            onTap: () => Navigator.pop(context),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/settings');
+            },
           ),
           ListTile(
             leading: const Icon(Icons.help, color: Colors.blue),
@@ -306,20 +313,11 @@ class _HomePageState extends State<HomePage> {
       case 0:
         return _buildHomeContent();
       case 1:
-        return FadeInUp(
-            child: const Center(
-                child:
-                    Text('your bookings will appear here\n Comming Soon...')));
+        return const BookingsPage();
       case 2:
-        return FadeInUp(
-            child: const Center(
-                child:
-                    Text('here you can see your bookmarks\n Comming Soon...')));
+        return const BookmarksPage();
       case 3:
-        return FadeInUp(
-            child: const Center(
-                child: Text(
-                    'here you can see all service providers\n Comming Soon...')));
+        return const ProvidersPage();
       default:
         return _buildHomeContent();
     }
@@ -427,8 +425,28 @@ class _HomePageState extends State<HomePage> {
                 'Confirm',
                 style: TextStyle(color: Colors.blue),
               ),
-              onPressed: () {
+              onPressed: () async {
                 Navigator.of(context).pop();
+
+                // Persist booking to Firestore
+                try {
+                  final userId =
+                      FirebaseAuth.instance.currentUser?.uid ?? '';
+                  if (userId.isNotEmpty) {
+                    await FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(userId)
+                        .collection('bookings')
+                        .add({
+                      'serviceName': _selectedService,
+                      'subServices': _selectedSubServices.toList(),
+                      'status': 'pending',
+                      'createdAt': FieldValue.serverTimestamp(),
+                    });
+                  }
+                } catch (e) {
+                  // silently fail
+                }
 
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(

@@ -33,4 +33,14 @@ class AuthService {
     var user = FirebaseAuth.instance.currentUser;
     return user != null;
   }
+
+  // send password reset email
+  Future<String> resetPassword(String email) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      return "Password reset email sent";
+    } on FirebaseAuthException catch (e) {
+      return e.message.toString();
+    }
+  }
 }
