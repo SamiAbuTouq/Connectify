@@ -2,8 +2,10 @@ import '/widgets/logo.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:connectify/services/auth_service.dart';
+import 'package:connectify/services/notification_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:connectify/utils/responsive_utils.dart';
+import 'package:connectify/theme.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -12,57 +14,17 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-var _buttonStyle = ElevatedButton.styleFrom(
-  shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(10),
-  ),
-  iconColor: Colors.white,
-  iconSize: 24,
-  foregroundColor: Colors.white,
-  backgroundColor: Colors.blue,
-  // side: const BorderSide(color: Color.fromARGB(255, 255, 255, 255), width: 2),
-  // elevation: 20,
-  // shadowColor: const Color.fromARGB(255, 0, 0, 0).withValues(alpha: 40),
-);
-
 class _LoginPageState extends State<LoginPage> {
   final formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
-  Future<UserCredential> signInWithGoogle() async {
+  Future<void> _handleGoogleSignIn() async {
     try {
-      // Trigger the authentication flow
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-      if (googleUser == null) {
-        // User canceled the sign-in process
-        // ScaffoldMessenger.of(context).showSnackBar(
-        //   SnackBar(content: Text('Google sign-in was canceled.')),
-        // );
-        return Future.error('Sign-in canceled by user.');
+      final userCredential = await AuthService().signInWithGoogle();
+      if (userCredential == null) {
+        return; // User canceled
       }
 
-      // Obtain the auth details from the request
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
-
-      if (googleAuth.accessToken == null || googleAuth.idToken == null) {
-        return Future.error('Google authentication failed.');
-      }
-      print("1");
-
-      // Create a new credential
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-      print("2");
-
-      // Sign in with Firebase
-      final userCredential =
-          await FirebaseAuth.instance.signInWithCredential(credential);
-      print("3");
       // Save user info to Firestore
       final user = userCredential.user;
       if (user != null) {
@@ -71,201 +33,181 @@ class _LoginPageState extends State<LoginPage> {
           'email': user.email,
           'image_url': user.photoURL,
         }, SetOptions(merge: true));
-      }
-      Navigator.pushReplacementNamed(context, "/homePage");
 
-      return userCredential;
+        // Save FCM device token
+        await NotificationService.instance.saveUserToken(user.uid);
+      }
+      if (!mounted) return;
+      Navigator.pushReplacementNamed(context, "/homePage");
     } catch (error) {
-      print('Google sign-in error: $error');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Google sign-in failed: $error')),
-      );
-      return Future.error(error);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Google sign-in failed: $error')),
+        );
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final r = Responsive(context);
+    final theme = Theme.of(context);
+    final buttonHeight = r.hp(6.5).clamp(48.0, 56.0);
+
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-      body: Form(
-        key: formKey,
+      body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 12,
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * .9,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: r.formMaxWidth),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: r.horizontalPadding),
+                child: Form(
+                  key: formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Logo(),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      const Text(
+                      const SizedBox(height: AppSpacing.sm),
+                      const Logo(),
+                      const SizedBox(height: AppSpacing.md),
+                      Text(
                         "Login",
-                        style: TextStyle(
-                          fontSize: 40,
+                        style: theme.textTheme.headlineLarge?.copyWith(
+                          fontSize: r.sp(32),
                           fontWeight: FontWeight.w700,
+                          color: theme.colorScheme.onSurface,
                         ),
                       ),
-                      const Text(
+                      const SizedBox(height: 4),
+                      Text(
                         "Get started with your account",
-                        style: TextStyle(fontFamily: "F2", fontSize: 15),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      SizedBox(
-                          width: MediaQuery.of(context).size.width * .9,
-                          child: TextFormField(
-                            validator: (value) => value!.isEmpty
-                                ? "Email cannot be empty."
-                                : null,
-                            controller: _emailController,
-                            decoration: const InputDecoration(
-                              prefixIcon: Icon(Icons.email_outlined),
-                              border: OutlineInputBorder(),
-                              label: Text("Email"),
-                            ),
-                          )),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * .9,
-                        child: TextFormField(
-                          // validator: (value) => value!.length < 8
-                          //     ? "Password should have atleast 8 characters."
-                          //     : null,
-                          controller: _passwordController,
-                          obscureText: true,
-                          decoration: const InputDecoration(
-                            prefixIcon: Icon(Icons.password_outlined),
-                            border: OutlineInputBorder(),
-                            label: Text("Password"),
-                          ),
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          fontSize: r.sp(14),
+                          color: theme.colorScheme.onSurfaceVariant,
                         ),
                       ),
-                      const SizedBox(
-                        height: 18,
+                      const SizedBox(height: AppSpacing.lg),
+                      TextFormField(
+                        validator: (value) => value!.isEmpty
+                            ? "Email cannot be empty."
+                            : null,
+                        controller: _emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.email_outlined),
+                          labelText: "Email",
+                        ),
                       ),
-                      Center(
-                        child: SizedBox(
-                          height: 55,
-                          width: MediaQuery.of(context).size.width * .88,
-                          //MediaQuery.of(context).size --> gives the dimensions of the screen
-                          child: ElevatedButton.icon(
-                            icon: const Icon(Icons.arrow_forward),
-                            iconAlignment: IconAlignment.end,
-                            style: _buttonStyle,
-                            onPressed: () {
-                              if (formKey.currentState!.validate()) {
-                                AuthService()
-                                    .loginWithEmail(_emailController.text,
-                                        _passwordController.text)
-                                    .then(
-                                  (value) {
-                                    if (value == "Login Successful") {
-                                      Navigator
-                                          .restorablePushNamedAndRemoveUntil(
-                                              context,
-                                              "/homePage",
-                                              (route) => false);
-                                    } else {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                        content: Text(
-                                          value,
-                                          style: const TextStyle(
-                                              color: Colors.white),
-                                        ),
-                                        backgroundColor: Colors.red.shade400,
-                                      ));
+                      const SizedBox(height: AppSpacing.md),
+                      TextFormField(
+                        controller: _passwordController,
+                        obscureText: true,
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.lock_outline_rounded),
+                          labelText: "Password",
+                        ),
+                      ),
+                      const SizedBox(height: AppSpacing.lg),
+                      SizedBox(
+                        height: buttonHeight,
+                        width: double.infinity,
+                        child: ElevatedButton.icon(
+                          icon: const Icon(Icons.arrow_forward),
+                          iconAlignment: IconAlignment.end,
+                          onPressed: () {
+                            if (formKey.currentState!.validate()) {
+                              AuthService()
+                                  .loginWithEmail(_emailController.text,
+                                      _passwordController.text)
+                                  .then(
+                                (value) async {
+                                  if (value == "Login Successful") {
+                                    final uid = FirebaseAuth.instance.currentUser?.uid;
+                                    if (uid != null) {
+                                      await NotificationService.instance.saveUserToken(uid);
                                     }
-                                  },
-                                );
-                              }
-                            },
-                            label: const Text(
-                              "Login",
-                              style: TextStyle(fontSize: 16),
+                                    if (!context.mounted) return;
+                                    Navigator.restorablePushNamedAndRemoveUntil(
+                                      context,
+                                      "/",
+                                      (route) => false,
+                                    );
+                                  } else {
+                                    if (!context.mounted) return;
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(value),
+                                      ),
+                                    );
+                                  }
+                                },
+                              );
+                            }
+                          },
+                          label: Text(
+                            "Login",
+                            style: TextStyle(
+                              fontSize: r.sp(15),
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        height: 18,
-                      ),
-                      Center(
-                        child: SizedBox(
-                          height: 55,
-                          width: MediaQuery.of(context).size.width * .88,
-                          child: ElevatedButton(
-                            iconAlignment: IconAlignment.end,
-                            style: _buttonStyle,
-                            onPressed: signInWithGoogle,
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  "assets/images/logo/google.png",
-                                  width: 27,
+                      const SizedBox(height: AppSpacing.md),
+                      SizedBox(
+                        height: buttonHeight,
+                        width: double.infinity,
+                        child: OutlinedButton(
+                          onPressed: _handleGoogleSignIn,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                "assets/images/logo/google.png",
+                                width: r.sp(20),
+                              ),
+                              const SizedBox(width: AppSpacing.sm),
+                              Text(
+                                "Sign in with Google",
+                                style: TextStyle(
+                                  fontSize: r.sp(15),
+                                  fontWeight: FontWeight.w600,
                                 ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                const Text(
-                                  "Sign in with Google",
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
+                      const SizedBox(height: AppSpacing.lg),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Container(
-                            decoration: const BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Color.fromARGB(40, 71, 65, 65),
-                                  spreadRadius: 1,
-                                  blurRadius: 35,
-                                  offset: Offset(5, 8),
-                                ),
-                              ],
+                          Text(
+                            "Don't have an account?",
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant,
                             ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Text("Don't have an account?"),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pushReplacementNamed(
-                                        context, "/signup");
-                                  },
-                                  child: const Text("Sign Up"),
-                                )
-                              ],
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pushReplacementNamed(
+                                context,
+                                "/signup",
+                              );
+                            },
+                            child: const Text(
+                              "Sign Up",
+                              style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
                         ],
-                      )
+                      ),
+                      const SizedBox(height: AppSpacing.md),
                     ],
                   ),
                 ),
-              ],
+              ),
             ),
           ),
         ),

@@ -1,24 +1,19 @@
-import 'package:flutter/material.dart ';
+import 'package:flutter/material.dart';
+import 'package:connectify/theme.dart';
 
 class Logo extends StatelessWidget {
+  const Logo({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        boxShadow: const [
-          BoxShadow(
-            color: Color.fromARGB(255, 255, 254, 254),
-            spreadRadius: 20,
-            blurRadius: 300,
-            offset: Offset(5, 5),
-          ),
-        ],
-        borderRadius: BorderRadius.circular(8),
-      ),
-      padding: EdgeInsets.fromLTRB(16, 0, 16, 15),
-      child: Image.asset(
-        'assets/images/logo/T-logo.png',
-        colorBlendMode: BlendMode.darken,
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 200, maxHeight: 120),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
+        child: Image.asset(
+          'assets/images/logo/T-logo.png',
+          fit: BoxFit.contain,
+        ),
       ),
     );
   }

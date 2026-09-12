@@ -2,6 +2,8 @@ import 'package:animate_do/animate_do.dart';
 import 'service.dart';
 import 'package:flutter/material.dart';
 import '../module/shared_data.dart';
+import 'package:connectify/utils/responsive_utils.dart';
+import 'package:connectify/theme.dart';
 
 class SelectService extends StatefulWidget {
   const SelectService({super.key});
@@ -18,9 +20,9 @@ class _SelectServiceState extends State<SelectService> {
         'https://img.icons8.com/3d-fluency/94/home-automation.png'),
     Service('Appliance Repair',
         'https://img.icons8.com/3d-fluency/94/maintenance.png'),
-    Service('Technology & IT ',
+    Service('Technology & IT',
         'https://img.icons8.com/3d-fluency/94/workstation.png'),
-    Service('Personal & Lifestyle ',
+    Service('Personal & Lifestyle',
         'https://img.icons8.com/3d-fluency/94/welfare.png'),
     Service('Educational & Tutoring',
         'https://img.icons8.com/3d-fluency/94/reading.png'),
@@ -34,17 +36,22 @@ class _SelectServiceState extends State<SelectService> {
 
   @override
   Widget build(BuildContext context) {
+    final r = Responsive(context);
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: Colors.white,
       floatingActionButton: selectedService >= 0
           ? FloatingActionButton(
               onPressed: () {
                 Navigator.pushNamed(context, "/service${selectedService + 1}");
               },
-              backgroundColor: Colors.blue,
+              backgroundColor: theme.colorScheme.primary,
+              foregroundColor: theme.colorScheme.onPrimary,
+              elevation: 2,
               child: const Icon(
-                Icons.arrow_forward_ios,
-                size: 20,
+                Icons.arrow_forward_rounded,
+                size: 22,
               ),
             )
           : null,
@@ -52,42 +59,64 @@ class _SelectServiceState extends State<SelectService> {
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return <Widget>[
             SliverToBoxAdapter(
-                child: FadeInUp(
-              child: Padding(
-                padding:
-                    const EdgeInsets.only(top: 120.0, right: 20.0, left: 20.0),
-                child: Text(
-                  'what type of service \do you want to offer?',
-                  style: TextStyle(
-                    fontSize: 40,
-                    color: Colors.grey.shade900,
-                    fontWeight: FontWeight.bold,
+              child: FadeInUp(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    top: r.hp(8),
+                    right: r.horizontalPadding,
+                    left: r.horizontalPadding,
+                    bottom: AppSpacing.md,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'What service do you offer?',
+                        style: theme.textTheme.headlineLarge?.copyWith(
+                          fontSize: r.sp(28),
+                          fontWeight: FontWeight.w700,
+                          color: theme.colorScheme.onSurface,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        'Select the primary category of your services',
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          fontSize: r.sp(14),
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ))
+            ),
           ];
         },
         body: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: EdgeInsets.all(r.horizontalPadding),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Expanded(
                 child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: r.gridColumns,
                     childAspectRatio: 0.85,
-                    crossAxisSpacing: 20.0,
-                    mainAxisSpacing: 20.0,
+                    crossAxisSpacing: AppSpacing.md,
+                    mainAxisSpacing: AppSpacing.md,
                   ),
-                  physics: const NeverScrollableScrollPhysics(),
                   itemCount: services.length,
                   itemBuilder: (BuildContext context, int index) {
                     return FadeInUp(
-                        delay: Duration(milliseconds: 500 * index),
-                        child: serviceContainer(services[index].imageURL,
-                            services[index].name, index));
+                      delay: Duration(milliseconds: 80 * index),
+                      child: serviceContainer(
+                        services[index].imageURL,
+                        services[index].name,
+                        index,
+                        isDark,
+                      ),
+                    );
                   },
                 ),
               ),
@@ -98,7 +127,12 @@ class _SelectServiceState extends State<SelectService> {
     );
   }
 
-  serviceContainer(String image, String name, int index) {
+  Widget serviceContainer(String image, String name, int index, bool isDark) {
+    final r = Responsive(context);
+    final theme = Theme.of(context);
+    final iconHeight = r.hp(8).clamp(50.0, 80.0);
+    final isSelected = selectedService == index;
+
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -112,33 +146,37 @@ class _SelectServiceState extends State<SelectService> {
         });
       },
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.all(AppSpacing.md),
         decoration: BoxDecoration(
-          color: selectedService == index
-              ? Colors.blue.shade50
-              : Colors.grey.shade100,
+          color: isSelected
+              ? (isDark ? AppColors.grey900 : AppColors.grey100)
+              : (isDark ? AppColors.darkSurface : AppColors.lightSurface),
           border: Border.all(
-            color: selectedService == index
-                ? Colors.blue
-                : const Color.fromARGB(0, 33, 149, 243),
-            width: 2.0,
+            color: isSelected
+                ? theme.colorScheme.primary
+                : (isDark ? AppColors.darkBorder : AppColors.lightBorder),
+            width: isSelected ? 2.0 : 1.0,
           ),
-          borderRadius: BorderRadius.circular(20.0),
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+          boxShadow: isSelected
+              ? (isDark ? AppShadows.darkSubtle : AppShadows.subtle)
+              : null,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image.network(image, height: 70),
-            const SizedBox(
-              height: 20,
-            ),
+            Image.network(image, height: iconHeight),
+            const SizedBox(height: AppSpacing.sm),
             Text(
               name,
-              style: const TextStyle(
-                fontSize: 18,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.titleSmall?.copyWith(
+                fontSize: r.sp(14),
+                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                color: theme.colorScheme.onSurface,
               ),
-            )
+            ),
           ],
         ),
       ),

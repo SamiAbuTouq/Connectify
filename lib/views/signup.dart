@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:connectify/services/auth_service.dart';
 import '/widgets/logo.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import '../module/shared_data.dart';
+import 'package:connectify/utils/responsive_utils.dart';
+import 'package:connectify/theme.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -12,298 +13,246 @@ class SignupPage extends StatefulWidget {
   State<SignupPage> createState() => _SignupPageState();
 }
 
-var buttonStyle = ElevatedButton.styleFrom(
-  shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(10),
-  ),
-  iconColor: Colors.white,
-  iconSize: 24,
-  foregroundColor: Colors.white,
-  backgroundColor: Colors.blue,
-  // side: const BorderSide(color: Color.fromARGB(255, 255, 255, 255), width: 2),
-  // elevation: 20,
-  // shadowColor: const Color.fromARGB(255, 0, 0, 0).withAlpha(40),
-);
-
 class _SignupPageState extends State<SignupPage> {
   final formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _reenterPasswordController =
       TextEditingController();
-  final GoogleSignIn googleSignIn = GoogleSignIn();
 
   bool _isPasswordVisible = false;
   bool _isReenterPasswordVisible = false;
 
-  Future<UserCredential> signInWithGoogle() async {
+  Future<void> _handleGoogleSignUp() async {
     try {
-      bool isSignedIn = await googleSignIn.isSignedIn();
-      if (isSignedIn) {
-        await googleSignIn.disconnect();
+      final userCredential = await AuthService().signInWithGoogle();
+      if (userCredential == null) {
+        return; // User canceled
       }
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-      if (googleUser == null) {
-        return Future.error('Sign-in canceled by user.');
-      }
-
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
-
-      if (googleAuth.accessToken == null || googleAuth.idToken == null) {
-        return Future.error('Google authentication failed.');
-      }
-
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-
-      final userCredential =
-          await FirebaseAuth.instance.signInWithCredential(credential);
       final user = userCredential.user;
       if (user != null) {
         sharedData['email'] = user.email ?? '';
         sharedData['password'] = _passwordController.text;
       }
-      Navigator.pushReplacementNamed(context, "/uploadPhoto");
 
-      return userCredential;
+      if (!mounted) return;
+      Navigator.pushReplacementNamed(context, "/uploadPhoto");
     } catch (error) {
-      print('Google sign-in error: $error');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Google sign-in failed: $error')),
-      );
-      return Future.error(error);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Google sign-up failed: $error')),
+        );
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final r = Responsive(context);
+    final theme = Theme.of(context);
+    final buttonHeight = r.hp(6.5).clamp(48.0, 56.0);
+
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-      body: Form(
-        key: formKey,
+      body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 12,
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * .9,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: r.formMaxWidth),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: r.horizontalPadding),
+                child: Form(
+                  key: formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Logo(),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      const Text(
+                      const SizedBox(height: AppSpacing.sm),
+                      const Logo(),
+                      const SizedBox(height: AppSpacing.md),
+                      Text(
                         "Sign Up",
-                        style: TextStyle(
-                            fontSize: 40, fontWeight: FontWeight.w700),
+                        style: theme.textTheme.headlineLarge?.copyWith(
+                          fontSize: r.sp(32),
+                          fontWeight: FontWeight.w700,
+                          color: theme.colorScheme.onSurface,
+                        ),
                       ),
-                      const Text(
+                      const SizedBox(height: 4),
+                      Text(
                         "Create a new account and get started",
-                        style: TextStyle(fontFamily: "F2", fontSize: 15),
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          fontSize: r.sp(14),
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
                       ),
-                      const SizedBox(
-                        height: 10,
+                      const SizedBox(height: AppSpacing.lg),
+                      TextFormField(
+                        validator: (value) => value!.isEmpty
+                            ? "Email cannot be empty."
+                            : null,
+                        controller: _emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.email_outlined),
+                          labelText: "Email",
+                        ),
                       ),
-                      SizedBox(
-                          width: MediaQuery.of(context).size.width * .9,
-                          child: TextFormField(
-                            validator: (value) => value!.isEmpty
-                                ? "Email cannot be empty."
-                                : null,
-                            controller: _emailController,
-                            decoration: const InputDecoration(
-                              prefixIcon: Icon(Icons.email_outlined),
-                              border: OutlineInputBorder(),
-                              label: Text("Email"),
+                      const SizedBox(height: AppSpacing.md),
+                      TextFormField(
+                        validator: (value) => value!.length < 8
+                            ? "Password should have at least 8 characters."
+                            : null,
+                        controller: _passwordController,
+                        obscureText: !_isPasswordVisible,
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.lock_outline_rounded),
+                          labelText: "Password",
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _isPasswordVisible
+                                  ? Icons.visibility_outlined
+                                  : Icons.visibility_off_outlined,
+                              color: theme.colorScheme.onSurfaceVariant,
                             ),
-                          )),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      SizedBox(
-                          width: MediaQuery.of(context).size.width * .9,
-                          child: TextFormField(
-                            validator: (value) => value!.length < 8
-                                ? "Password should have at least 8 characters."
-                                : null,
-                            controller: _passwordController,
-                            obscureText: !_isPasswordVisible,
-                            decoration: InputDecoration(
-                              prefixIcon: const Icon(Icons.password_outlined),
-                              border: const OutlineInputBorder(),
-                              label: const Text("Password"),
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  _isPasswordVisible
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    _isPasswordVisible = !_isPasswordVisible;
-                                  });
-                                },
-                              ),
-                            ),
-                          )),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      SizedBox(
-                          width: MediaQuery.of(context).size.width * .9,
-                          child: TextFormField(
-                            validator: (value) =>
-                                value != _passwordController.text
-                                    ? "Passwords do not match."
-                                    : null,
-                            controller: _reenterPasswordController,
-                            obscureText: !_isReenterPasswordVisible,
-                            decoration: InputDecoration(
-                              prefixIcon: const Icon(Icons.password_outlined),
-                              border: const OutlineInputBorder(),
-                              label: const Text("Re-enter Password"),
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  _isReenterPasswordVisible
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    _isReenterPasswordVisible =
-                                        !_isReenterPasswordVisible;
-                                  });
-                                },
-                              ),
-                            ),
-                          )),
-                      const SizedBox(
-                        height: 18,
-                      ),
-                      Center(
-                        child: SizedBox(
-                          height: 55,
-                          width: MediaQuery.of(context).size.width * .88,
-                          child: ElevatedButton.icon(
-                            icon: const Icon(Icons.arrow_forward),
-                            iconAlignment: IconAlignment.end,
-                            style: buttonStyle,
                             onPressed: () {
-                              if (formKey.currentState!.validate()) {
-                                AuthService()
-                                    .createAccountWithEmail(
-                                        _emailController.text,
-                                        _passwordController.text)
-                                    .then(
-                                  (value) {
-                                    if (value == "Account Created") {
-                                      final user =
-                                          FirebaseAuth.instance.currentUser;
-                                      if (user != null) {
-                                        sharedData['email'] = user.email ?? '';
-                                        sharedData['password'] =
-                                            _passwordController.text;
-                                      }
-                                      Navigator.pushNamedAndRemoveUntil(context,
-                                          "/uploadPhoto", (route) => false);
-                                    } else {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            value,
-                                            style: const TextStyle(
-                                                color: Colors.white),
-                                          ),
-                                          backgroundColor: Colors.red.shade400,
-                                        ),
-                                      );
-                                    }
-                                  },
-                                );
-                              }
+                              setState(() {
+                                _isPasswordVisible = !_isPasswordVisible;
+                              });
                             },
-                            label: const Text(
-                              "Sign Up",
-                              style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: AppSpacing.md),
+                      TextFormField(
+                        validator: (value) =>
+                            value != _passwordController.text
+                                ? "Passwords do not match."
+                                : null,
+                        controller: _reenterPasswordController,
+                        obscureText: !_isReenterPasswordVisible,
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.lock_outline_rounded),
+                          labelText: "Re-enter Password",
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _isReenterPasswordVisible
+                                  ? Icons.visibility_outlined
+                                  : Icons.visibility_off_outlined,
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _isReenterPasswordVisible =
+                                    !_isReenterPasswordVisible;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: AppSpacing.lg),
+                      SizedBox(
+                        height: buttonHeight,
+                        width: double.infinity,
+                        child: ElevatedButton.icon(
+                          icon: const Icon(Icons.arrow_forward),
+                          iconAlignment: IconAlignment.end,
+                          onPressed: () {
+                            if (formKey.currentState!.validate()) {
+                              AuthService()
+                                  .createAccountWithEmail(
+                                      _emailController.text,
+                                      _passwordController.text)
+                                  .then(
+                                (value) {
+                                  if (value == "Account Created") {
+                                    final user =
+                                        FirebaseAuth.instance.currentUser;
+                                    if (user != null) {
+                                      sharedData['email'] = user.email ?? '';
+                                      sharedData['password'] =
+                                          _passwordController.text;
+                                    }
+                                    if (!context.mounted) return;
+                                    Navigator.pushNamedAndRemoveUntil(
+                                      context,
+                                      "/uploadPhoto",
+                                      (route) => false,
+                                    );
+                                  } else {
+                                    if (!context.mounted) return;
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(value),
+                                      ),
+                                    );
+                                  }
+                                },
+                              );
+                            }
+                          },
+                          label: Text(
+                            "Sign Up",
+                            style: TextStyle(
+                              fontSize: r.sp(15),
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        height: 18,
-                      ),
-                      Center(
-                        child: SizedBox(
-                          height: 55,
-                          width: MediaQuery.of(context).size.width * .88,
-                          child: ElevatedButton(
-                            iconAlignment: IconAlignment.end,
-                            style: buttonStyle,
-                            onPressed: signInWithGoogle,
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  "assets/images/logo/google.png",
-                                  width: 27,
+                      const SizedBox(height: AppSpacing.md),
+                      SizedBox(
+                        height: buttonHeight,
+                        width: double.infinity,
+                        child: OutlinedButton(
+                          onPressed: _handleGoogleSignUp,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                "assets/images/logo/google.png",
+                                width: r.sp(20),
+                              ),
+                              const SizedBox(width: AppSpacing.sm),
+                              Text(
+                                "Sign up with Google",
+                                style: TextStyle(
+                                  fontSize: r.sp(15),
+                                  fontWeight: FontWeight.w600,
                                 ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                const Text(
-                                  "Sign up with Google",
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
+                      const SizedBox(height: AppSpacing.lg),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Container(
-                            decoration: const BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Color.fromARGB(40, 71, 65, 65),
-                                  spreadRadius: 1,
-                                  blurRadius: 35,
-                                  offset: Offset(5, 8),
-                                ),
-                              ],
+                          Text(
+                            "Already have an account?",
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant,
                             ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Text("Already have an account?"),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pushReplacementNamed(
-                                        context, "/login");
-                                  },
-                                  child: const Text("Login"),
-                                )
-                              ],
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pushReplacementNamed(
+                                context,
+                                "/login",
+                              );
+                            },
+                            child: const Text(
+                              "Login",
+                              style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
                         ],
-                      )
+                      ),
+                      const SizedBox(height: AppSpacing.md),
                     ],
                   ),
                 ),
-              ],
+              ),
             ),
           ),
         ),

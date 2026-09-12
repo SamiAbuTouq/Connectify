@@ -1,0 +1,14 @@
+{
+  "name": "connectify-scripts",
+  "version": "1.0.0",
+  "description": "Database seeding and maintenance scripts for Connectify",
+  "main": "seed.js",
+  "scripts": {
+    "seed": "node seed.js",
+    "clean": "node seed.js --clean-only",
+    "reseed": "node seed.js --clean"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.0.0"
+  }
+}

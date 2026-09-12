@@ -2,6 +2,8 @@ import 'package:animate_do/animate_do.dart';
 import 'package:connectify/views/service.dart';
 import 'package:connectify/module/shared_data.dart';
 import 'package:flutter/material.dart';
+import 'package:connectify/utils/responsive_utils.dart';
+import 'package:connectify/theme.dart';
 
 class SelectService14 extends StatefulWidget {
   const SelectService14({super.key});
@@ -27,8 +29,11 @@ class _SelectServiceState extends State<SelectService14> {
 
   @override
   Widget build(BuildContext context) {
+    final r = Responsive(context);
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: Colors.white,
       floatingActionButton: selectedServices.isNotEmpty
           ? FloatingActionButton(
               onPressed: () {
@@ -39,65 +44,87 @@ class _SelectServiceState extends State<SelectService14> {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),
+                        borderRadius: BorderRadius.circular(AppRadius.xl),
+                        side: BorderSide(color: theme.colorScheme.outline),
                       ),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(
-                            Icons.check_circle,
-                            color: Colors.blue,
-                            size: 60,
-                          ),
-                          const SizedBox(height: 20),
-                          const Text(
-                            "Account Created",
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          const Text(
-                            "Welcome aboard! Your service provider account is now live. Start connecting and creating remarkable experiences!",
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 20),
-                          ElevatedButton(
-                            onPressed: () {
-                              storeUserInfo();
-                              Navigator.pushNamedAndRemoveUntil(
-                                context,
-                                "/homePage",
-                                (route) => false,
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
+                      content: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(AppSpacing.md),
+                              decoration: BoxDecoration(
+                                color: isDark
+                                    ? AppColors.grey800
+                                    : AppColors.grey100,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                Icons.check_circle_rounded,
+                                color: theme.colorScheme.primary,
+                                size: 52,
                               ),
                             ),
-                            child: const Text(
-                              "Home",
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.white,
+                            const SizedBox(height: AppSpacing.md),
+                            Text(
+                              "Account Created",
+                              style: theme.textTheme.headlineSmall?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: theme.colorScheme.onSurface,
                               ),
                             ),
-                          ),
-                        ],
+                            const SizedBox(height: 8),
+                            Text(
+                              "Welcome aboard! Your service provider account is now live. Start connecting with seekers today!",
+                              textAlign: TextAlign.center,
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: theme.colorScheme.onSurfaceVariant,
+                                height: 1.4,
+                              ),
+                            ),
+                            const SizedBox(height: AppSpacing.lg),
+                            SizedBox(
+                              width: double.infinity,
+                              height: 48,
+                              child: ElevatedButton(
+                                onPressed: () async {
+                                  try {
+                                    await storeUserInfo(context);
+                                    if (context.mounted) {
+                                      Navigator.pushNamedAndRemoveUntil(
+                                        context,
+                                        "/providerDashboard",
+                                        (route) => false,
+                                      );
+                                    }
+                                  } catch (_) {
+                                    // Error already shown as SnackBar inside storeUserInfo().
+                                  }
+                                },
+                                child: const Text(
+                                  "Go to Dashboard",
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },
                 );
               },
-              backgroundColor: Colors.blue,
+              backgroundColor: theme.colorScheme.primary,
+              foregroundColor: theme.colorScheme.onPrimary,
+              elevation: 2,
               child: const Icon(
-                Icons.arrow_forward_ios,
-                size: 20,
+                Icons.arrow_forward_rounded,
+                size: 22,
               ),
             )
           : null,
@@ -105,42 +132,64 @@ class _SelectServiceState extends State<SelectService14> {
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return <Widget>[
             SliverToBoxAdapter(
-                child: FadeInUp(
-              child: Padding(
-                padding:
-                    const EdgeInsets.only(top: 120.0, right: 20.0, left: 20.0),
-                child: Text(
-                  'Pick the services\n you can deliver',
-                  style: TextStyle(
-                    fontSize: 40,
-                    color: Colors.grey.shade900,
-                    fontWeight: FontWeight.bold,
+              child: FadeInUp(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    top: r.hp(8),
+                    right: r.horizontalPadding,
+                    left: r.horizontalPadding,
+                    bottom: AppSpacing.md,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Pick your sub-services',
+                        style: theme.textTheme.headlineLarge?.copyWith(
+                          fontSize: r.sp(28),
+                          fontWeight: FontWeight.w700,
+                          color: theme.colorScheme.onSurface,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        'Choose the specific services you can deliver',
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          fontSize: r.sp(14),
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ))
+            )
           ];
         },
         body: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: EdgeInsets.all(r.horizontalPadding),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Expanded(
                 child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: r.gridColumns,
                     childAspectRatio: 0.85,
-                    crossAxisSpacing: 20.0,
-                    mainAxisSpacing: 20.0,
+                    crossAxisSpacing: AppSpacing.md,
+                    mainAxisSpacing: AppSpacing.md,
                   ),
-                  physics: const NeverScrollableScrollPhysics(),
                   itemCount: services.length,
                   itemBuilder: (BuildContext context, int index) {
                     return FadeInUp(
-                        delay: Duration(milliseconds: 350 * index),
-                        child: serviceContainer(services[index].imageURL,
-                            services[index].name, index));
+                      delay: Duration(milliseconds: 80 * index),
+                      child: serviceContainer(
+                        services[index].imageURL,
+                        services[index].name,
+                        index,
+                        isDark,
+                      ),
+                    );
                   },
                 ),
               ),
@@ -151,48 +200,54 @@ class _SelectServiceState extends State<SelectService14> {
     );
   }
 
-  Widget serviceContainer(String image, String name, int index) {
+  Widget serviceContainer(String image, String name, int index, bool isDark) {
+    final r = Responsive(context);
+    final theme = Theme.of(context);
+    final iconHeight = r.hp(8).clamp(50.0, 80.0);
+    final isSelected = selectedServices.contains(index);
+
     return GestureDetector(
       onTap: () {
-        setState(
-          () {
-            if (selectedServices.contains(index)) {
-              selectedServices.remove(index);
-            } else {
-              selectedServices.add(index);
-            }
-          },
-        );
+        setState(() {
+          if (selectedServices.contains(index)) {
+            selectedServices.remove(index);
+          } else {
+            selectedServices.add(index);
+          }
+        });
       },
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.all(AppSpacing.md),
         decoration: BoxDecoration(
-          color: selectedServices.contains(index)
-              ? Colors.blue.shade50
-              : Colors.grey.shade100,
+          color: isSelected
+              ? (isDark ? AppColors.grey900 : AppColors.grey100)
+              : (isDark ? AppColors.darkSurface : AppColors.lightSurface),
           border: Border.all(
-            color: selectedServices.contains(index)
-                ? Colors.blue
-                : const Color.fromARGB(0, 33, 149, 243),
-            width: 2.0,
+            color: isSelected
+                ? theme.colorScheme.primary
+                : (isDark ? AppColors.darkBorder : AppColors.lightBorder),
+            width: isSelected ? 2.0 : 1.0,
           ),
-          borderRadius: BorderRadius.circular(20.0),
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+          boxShadow: isSelected
+              ? (isDark ? AppShadows.darkSubtle : AppShadows.subtle)
+              : null,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image.network(image, height: 70),
-            const SizedBox(
-              height: 20,
-            ),
+            Image.network(image, height: iconHeight),
+            const SizedBox(height: AppSpacing.sm),
             Text(
               name,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 18,
+              style: theme.textTheme.titleSmall?.copyWith(
+                fontSize: r.sp(14),
+                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                color: theme.colorScheme.onSurface,
               ),
-            )
+            ),
           ],
         ),
       ),

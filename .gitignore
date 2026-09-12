@@ -47,3 +47,8 @@ firebase.json
 .env
 firebase_options.dart
 google-services.json
+*serviceAccountKey*.json
+scripts/node_modules/
+
+serviceAccountKey.json
+scripts/serviceAccountKey.json

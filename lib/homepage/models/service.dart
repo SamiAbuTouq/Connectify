@@ -47,15 +47,15 @@ class Service {
       description: 'Electrical Repair & Installation',
       subServices: [
         'Refrigerator Repair',
-        'Washing Machine ',
+        'Washing Machine',
         'Microwave & Oven Repair',
         'Television Repair',
       ],
       subServicesImg: [
         'https://img.icons8.com/3d-fluency/94/fridge.png',
-        'https://img.icons8.com/3d-fluency/94/hdtv.png',
         'https://img.icons8.com/3d-fluency/94/washing-machine.png',
         'https://img.icons8.com/3d-fluency/94/cooker--v3.png',
+        'https://img.icons8.com/3d-fluency/94/hdtv.png',
       ],
     ),
     Service(
@@ -64,7 +64,7 @@ class Service {
           Image.network('https://img.icons8.com/3d-fluency/94/workstation.png'),
       description: 'Landscaping & Garden Maintenance',
       subServices: [
-        ' Network Setup',
+        'Network Setup',
         'Smart Home Installation',
         'Computer Repairs',
       ],
@@ -103,7 +103,6 @@ class Service {
         'Languages',
         'History',
         'Computer Science',
-        'Art & Design',
         'Drawing & Sketching',
         'Music & Performance',
       ],
@@ -124,7 +123,7 @@ class Service {
       img: Image.network('https://img.icons8.com/3d-fluency/94/confetti.png'),
       description: 'Landscaping & Garden Maintenance',
       subServices: [
-        ' Security Services',
+        'Security Services',
         'Photography & Videography',
         'Catering Services',
         'Decoration Services',

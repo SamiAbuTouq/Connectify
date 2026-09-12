@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'onboarding_page.dart';
 import 'transitions.dart';
+import 'package:connectify/utils/responsive_utils.dart';
 import 'package:connectify/views/login.dart';
+import 'package:connectify/theme.dart';
 
 class OnboardingScreens extends StatefulWidget {
-  const OnboardingScreens({Key? key}) : super(key: key);
+  const OnboardingScreens({super.key});
 
   @override
   State<OnboardingScreens> createState() => _OnboardingScreenState();
@@ -64,7 +66,7 @@ class _OnboardingScreenState extends State<OnboardingScreens>
   void _nextPage() {
     if (_currentPage < _numPages - 1) {
       _pageController.nextPage(
-        duration: const Duration(milliseconds: 800),
+        duration: const Duration(milliseconds: 600),
         curve: Curves.easeInOutCubic,
       );
     }
@@ -73,7 +75,7 @@ class _OnboardingScreenState extends State<OnboardingScreens>
   void _previousPage() {
     if (_currentPage > 0) {
       _pageController.previousPage(
-        duration: const Duration(milliseconds: 800),
+        duration: const Duration(milliseconds: 600),
         curve: Curves.easeInOutCubic,
       );
     }
@@ -81,8 +83,12 @@ class _OnboardingScreenState extends State<OnboardingScreens>
 
   @override
   Widget build(BuildContext context) {
+    final r = Responsive(context);
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 250, 250),
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: Stack(
         children: [
           PageView.builder(
@@ -103,101 +109,121 @@ class _OnboardingScreenState extends State<OnboardingScreens>
             },
           ),
           Positioned(
-            bottom: 48.0,
+            bottom: 0,
             left: 0,
             right: 0,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 32.0),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      _numPages,
-                      (index) => TweenAnimationBuilder<double>(
-                        duration: const Duration(milliseconds: 300),
-                        tween: Tween(begin: 0.0, end: 1.0),
-                        builder: (context, value, child) {
-                          return AnimatedContainer(
-                            duration: const Duration(milliseconds: 300),
-                            margin: const EdgeInsets.symmetric(horizontal: 4),
-                            width: _currentPage == index ? 24 : 8,
-                            height: 8,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4),
-                                color: const Color.fromARGB(255, 0, 0, 0)),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 32),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      if (_currentPage > 0)
-                        AnimatedSlideFade(
-                          duration: const Duration(milliseconds: 400),
-                          offset: const Offset(-20, 0),
-                          child: TextButton(
-                            onPressed: _previousPage,
-                            style: TextButton.styleFrom(
-                              foregroundColor: Colors.blue,
-                              backgroundColor: Colors.white,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 24),
-                            ),
-                            child: const Text(
-                              'Back',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ),
-                        )
-                      else
-                        const SizedBox(width: 80),
-                      AnimatedSlideFade(
-                        duration: const Duration(milliseconds: 400),
-                        offset: const Offset(20, 0),
-                        child: ElevatedButton(
-                          onPressed: _currentPage == _numPages - 1
-                              ? () {
-                                  Navigator.of(context).pushReplacement(
-                                    PageRouteBuilder(
-                                      pageBuilder: (context, animation,
-                                          secondaryAnimation) {
-                                        return FadeTransition(
-                                          opacity: animation,
-                                          child: const LoginPage(),
-                                        );
-                                      },
-                                      transitionDuration:
-                                          const Duration(milliseconds: 800),
-                                    ),
-                                  );
-                                }
-                              : _nextPage,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 32,
-                              vertical: 12,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                          ),
-                          child: Text(
-                            _currentPage == _numPages - 1
-                                ? 'Get Started'
-                                : 'Next',
-                            style: const TextStyle(fontSize: 16),
-                          ),
+            child: SafeArea(
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: r.horizontalPadding,
+                  vertical: AppSpacing.md,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(
+                        _numPages,
+                        (index) => TweenAnimationBuilder<double>(
+                          duration: const Duration(milliseconds: 300),
+                          tween: Tween(begin: 0.0, end: 1.0),
+                          builder: (context, value, child) {
+                            return AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              margin: const EdgeInsets.symmetric(horizontal: 4),
+                              width: _currentPage == index ? 24 : 6,
+                              height: 6,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(3),
+                                color: _currentPage == index
+                                    ? theme.colorScheme.primary
+                                    : (isDark
+                                        ? AppColors.grey800
+                                        : AppColors.grey300),
+                              ),
+                            );
+                          },
                         ),
                       ),
-                    ],
-                  ),
-                ],
+                    ),
+                    const SizedBox(height: AppSpacing.lg),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        if (_currentPage > 0)
+                          AnimatedSlideFade(
+                            duration: const Duration(milliseconds: 400),
+                            offset: const Offset(-20, 0),
+                            child: TextButton(
+                              onPressed: _previousPage,
+                              style: TextButton.styleFrom(
+                                foregroundColor: theme.colorScheme.onSurfaceVariant,
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: r.wp(3).clamp(8.0, 16.0),
+                                  vertical: 10,
+                                ),
+                              ),
+                              child: Text(
+                                'Back',
+                                style: TextStyle(
+                                  fontSize: r.sp(15).clamp(13.0, 16.0),
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          )
+                        else
+                          const SizedBox.shrink(),
+                        AnimatedSlideFade(
+                          duration: const Duration(milliseconds: 400),
+                          offset: const Offset(20, 0),
+                          child: ElevatedButton(
+                            onPressed: _currentPage == _numPages - 1
+                                ? () {
+                                    Navigator.of(context).pushReplacement(
+                                      PageRouteBuilder(
+                                        pageBuilder: (context, animation,
+                                            secondaryAnimation) {
+                                          return FadeTransition(
+                                            opacity: animation,
+                                            child: const LoginPage(),
+                                          );
+                                        },
+                                        transitionDuration:
+                                            const Duration(milliseconds: 600),
+                                      ),
+                                    );
+                                  }
+                                : _nextPage,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: theme.colorScheme.primary,
+                              foregroundColor: theme.colorScheme.onPrimary,
+                              elevation: 0,
+                              minimumSize: const Size(0, 48),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: r.wp(5).clamp(18.0, 32.0),
+                                vertical: 12,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(AppRadius.md),
+                              ),
+                            ),
+                            child: Text(
+                              _currentPage == _numPages - 1
+                                  ? 'Get Started'
+                                  : 'Next',
+                              style: TextStyle(
+                                fontSize: r.sp(15).clamp(13.0, 16.0),
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

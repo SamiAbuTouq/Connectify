@@ -10,7 +10,7 @@ import 'package:crypto/crypto.dart';
 import 'package:permission_handler/permission_handler.dart'; // For accessing device directories
 import '../module/shared_data.dart';
 
-Future<bool> uploadToCloudinary(XFile? selectedFile) async {
+Future<bool> uploadToCloudinary(XFile? selectedFile, {String folder = "profile_images"}) async {
   if (selectedFile == null) {
     print("No file selected!");
     return false;
@@ -22,7 +22,7 @@ Future<bool> uploadToCloudinary(XFile? selectedFile) async {
   String cloudName = dotenv.env['CLOUDINARY_CLOUD_NAME'] ?? '';
 
   // Create a MultipartRequest to upload the file
-  var uri = Uri.parse("https://api.cloudinary.com/v1_1/$cloudName/raw/upload");
+  var uri = Uri.parse("https://api.cloudinary.com/v1_1/$cloudName/image/upload");
   var request = http.MultipartRequest("POST", uri);
 
   // Create a MultipartFile from the bytes
@@ -36,7 +36,10 @@ Future<bool> uploadToCloudinary(XFile? selectedFile) async {
   request.files.add(multipartFile);
 
   request.fields['upload_preset'] = "samiabutouq";
-  request.fields['resource_type'] = "raw";
+  request.fields['resource_type'] = "image";
+  if (folder.isNotEmpty) {
+    request.fields['folder'] = folder;
+  }
 
   // Send the request and await the response
   var response = await request.send();
@@ -45,22 +48,9 @@ Future<bool> uploadToCloudinary(XFile? selectedFile) async {
       .transform(utf8.decoder) // Decode the bytes to string using utf8
       .join();
 
-  // final user = FirebaseAuth.instance.currentUser!;
-
   // Print the response
   if (response.statusCode == 200) {
     var jsonResponse = jsonDecode(responseBody);
-    // Map<String, String> requiredData = {
-    //   'userId': user.uid,
-    //   'username': 'to be implemented...', //todo: implement username
-    //   "imageName": selectedFile.name,
-    //   "id": jsonResponse["public_id"],
-    //   "size": jsonResponse["bytes"].toString(),
-    //   "userImgUrl": jsonResponse["secure_url"],
-    //   "created_at": jsonResponse["created_at"],
-    // };
-
-    // await DbService().saveUploadedFilesData(requiredData);
     sharedData['imageUrl'] = jsonResponse["secure_url"];
     print(sharedData);
 
@@ -72,7 +62,7 @@ Future<bool> uploadToCloudinary(XFile? selectedFile) async {
   }
 }
 
-Future<bool> uploadToCloudinary1(File? selectedFile) async {
+Future<bool> uploadToCloudinary1(File? selectedFile, {String folder = "profile_images"}) async {
   if (selectedFile == null) {
     print("No file selected!");
     return false;
@@ -84,7 +74,7 @@ Future<bool> uploadToCloudinary1(File? selectedFile) async {
   String cloudName = dotenv.env['CLOUDINARY_CLOUD_NAME'] ?? '';
 
   // Create a MultipartRequest to upload the file
-  var uri = Uri.parse("https://api.cloudinary.com/v1_1/$cloudName/raw/upload");
+  var uri = Uri.parse("https://api.cloudinary.com/v1_1/$cloudName/image/upload");
   var request = http.MultipartRequest("POST", uri);
 
   // Create a MultipartFile from the bytes
@@ -100,7 +90,10 @@ Future<bool> uploadToCloudinary1(File? selectedFile) async {
   request.files.add(multipartFile);
 
   request.fields['upload_preset'] = "samiabutouq";
-  request.fields['resource_type'] = "raw";
+  request.fields['resource_type'] = "image";
+  if (folder.isNotEmpty) {
+    request.fields['folder'] = folder;
+  }
 
   // Send the request and await the response
   var response = await request.send();
@@ -109,22 +102,9 @@ Future<bool> uploadToCloudinary1(File? selectedFile) async {
       .transform(utf8.decoder) // Decode the bytes to string using utf8
       .join();
 
-  // final user = FirebaseAuth.instance.currentUser!;
-
   // Print the response
   if (response.statusCode == 200) {
     var jsonResponse = jsonDecode(responseBody);
-    // Map<String, String> requiredData = {
-    //   'userId': user.uid,
-    //   'username': 'to be implemented...', //todo: implement username
-    //   "imageName": selectedFile.path.split('/').last,
-    //   "id": jsonResponse["public_id"],
-    //   "size": jsonResponse["bytes"].toString(),
-    //   "userImgUrl": jsonResponse["secure_url"],
-    //   "created_at": jsonResponse["created_at"],
-    // };
-
-    // await DbService().saveUploadedFilesData(requiredData);
     sharedData['imageUrl'] = jsonResponse["secure_url"];
     print(sharedData);
 

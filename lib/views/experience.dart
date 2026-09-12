@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../module/shared_data.dart';
+import 'package:connectify/utils/responsive_utils.dart';
+import 'package:connectify/theme.dart';
 
 class Experiance extends StatefulWidget {
   const Experiance({super.key});
@@ -15,114 +17,144 @@ class _ExperianceState extends State<Experiance> {
 
   @override
   Widget build(BuildContext context) {
+    final r = Responsive(context);
+    final theme = Theme.of(context);
+    final buttonHeight = r.hp(6.5).clamp(48.0, 56.0);
+
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Connectify',
-          style: TextStyle(
-            fontFamily: "F1",
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-            fontSize: 30,
+          style: theme.textTheme.headlineSmall?.copyWith(
+            fontWeight: FontWeight.w700,
+            fontSize: r.sp(20),
           ),
         ),
-        backgroundColor: Colors.blue,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(25, 40, 25, 0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "Select Your Experience",
-                style: TextStyle(fontSize: 16),
-              ),
-              const SizedBox(height: 7),
-              DropdownButtonFormField<String>(
-                dropdownColor: Colors.white,
-                value: _selectedDuration,
-                hint: const Text("Select years of experience"),
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
+      body: SafeArea(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: r.contentMaxWidth),
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: r.horizontalPadding,
+                  vertical: AppSpacing.lg,
                 ),
-                items: const [
-                  DropdownMenuItem(
-                      value: "less than 1 Year",
-                      child: Text("less than 1 Year")),
-                  DropdownMenuItem(value: "1 Year", child: Text("1 Year")),
-                  DropdownMenuItem(value: "2 Year", child: Text("2 Year")),
-                  DropdownMenuItem(value: "4 Year", child: Text("4 Year")),
-                  DropdownMenuItem(value: "3 Year", child: Text("3 Year")),
-                  DropdownMenuItem(
-                      value: "5 to 10 Year", child: Text("5 to 10 Year")),
-                  DropdownMenuItem(value: "+10 Year", child: Text("+10 Year")),
-                ],
-                onChanged: (value) {
-                  setState(() {
-                    _selectedDuration = value;
-                  });
-                },
-                validator: (value) {
-                  if (value == null) {
-                    return "Please select a duration.";
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 30),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'More information (Optional)',
-                  ),
-                  const SizedBox(height: 7),
-                  TextFormField(
-                    controller: _optionalInfoController,
-                    minLines: 3,
-                    maxLines: null,
-                    decoration: const InputDecoration(
-                      hintText: "write here...",
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  icon: const Icon(Icons.arrow_forward),
-                  iconAlignment: IconAlignment.end,
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 50),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    iconColor: Colors.white,
-                    iconSize: 22,
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.blue,
-                  ),
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      sharedData['experience'] = _selectedDuration;
-                      sharedData['otherInfo'] = _optionalInfoController.text;
-                      Navigator.pushNamed(context, "/selectService");
-                    }
-                  },
-                  label: const Text(
-                    "Next",
-                    style: TextStyle(fontSize: 18),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Your Experience",
+                        style: theme.textTheme.headlineLarge?.copyWith(
+                          fontSize: r.sp(28),
+                          fontWeight: FontWeight.w700,
+                          color: theme.colorScheme.onSurface,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        "Help clients understand your expertise level",
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          fontSize: r.sp(14),
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                      const SizedBox(height: AppSpacing.xl),
+                      Text(
+                        "Select Your Experience",
+                        style: theme.textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: theme.colorScheme.onSurface,
+                        ),
+                      ),
+                      const SizedBox(height: AppSpacing.sm),
+                      DropdownButtonFormField<String>(
+                        value: _selectedDuration,
+                        hint: Text(
+                          "Select years of experience",
+                          style: TextStyle(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                        decoration: const InputDecoration(),
+                        items: const [
+                          DropdownMenuItem(
+                              value: "less than 1 Year",
+                              child: Text("less than 1 Year")),
+                          DropdownMenuItem(value: "1 Year", child: Text("1 Year")),
+                          DropdownMenuItem(value: "2 Year", child: Text("2 Year")),
+                          DropdownMenuItem(value: "3 Year", child: Text("3 Year")),
+                          DropdownMenuItem(value: "4 Year", child: Text("4 Year")),
+                          DropdownMenuItem(
+                              value: "5 to 10 Year", child: Text("5 to 10 Year")),
+                          DropdownMenuItem(value: "+10 Year", child: Text("+10 Year")),
+                        ],
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedDuration = value;
+                          });
+                        },
+                        validator: (value) {
+                          if (value == null) {
+                            return "Please select a duration.";
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: AppSpacing.lg),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'More information (Optional)',
+                            style: theme.textTheme.titleSmall?.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: theme.colorScheme.onSurface,
+                            ),
+                          ),
+                          const SizedBox(height: AppSpacing.sm),
+                          TextFormField(
+                            controller: _optionalInfoController,
+                            minLines: 3,
+                            maxLines: null,
+                            decoration: const InputDecoration(
+                              hintText: "Tell us about your background, special skills...",
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: AppSpacing.xl),
+                      SizedBox(
+                        width: double.infinity,
+                        height: buttonHeight,
+                        child: ElevatedButton.icon(
+                          icon: const Icon(Icons.arrow_forward),
+                          iconAlignment: IconAlignment.end,
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              sharedData['experience'] = _selectedDuration;
+                              sharedData['otherInfo'] = _optionalInfoController.text;
+                              Navigator.pushNamed(context, "/selectService");
+                            }
+                          },
+                          label: Text(
+                            "Next",
+                            style: TextStyle(
+                              fontSize: r.sp(15),
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: r.hp(2)),
+                    ],
                   ),
                 ),
               ),
-            ],
+            ),
           ),
         ),
       ),

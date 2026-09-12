@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:connectify/theme.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -17,30 +18,26 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void navigateToAuthScreen() {
     Timer(const Duration(seconds: 2), () {
+      if (!mounted) return;
       Navigator.pushReplacementNamed(context, "/onboardingScreens");
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Color.fromARGB(255, 255, 255, 255),
-            Color.fromARGB(255, 199, 200, 200),
-          ],
-        ),
-      ),
-      child: Center(
+    final theme = Theme.of(context);
+
+    return Scaffold(
+      backgroundColor: theme.scaffoldBackgroundColor,
+      body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Image.asset(
-            'assets/images/logo/T-logo.png',
+          padding: const EdgeInsets.all(AppSpacing.lg),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 240, maxHeight: 240),
+            child: Image.asset(
+              'assets/images/logo/T-logo.png',
+              fit: BoxFit.contain,
+            ),
           ),
         ),
       ),
