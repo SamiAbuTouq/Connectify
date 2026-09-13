@@ -16,7 +16,6 @@ A cross-platform Flutter application that connects users with local service prov
 - AI Chatbot - integrated virtual assistant powered by Google Generative AI (Gemini)
 - Push Notifications - notification handling powered by Firebase Cloud Messaging (FCM)
 - Help & Support - in-app support page with direct email contact
-- Payment methods - choose from Credit Card, PayPal, Google Pay, Apple Pay, or Bank Transfer
 
 ## Tech Stack
 
